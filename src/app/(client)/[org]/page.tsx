@@ -1,12 +1,20 @@
 "use client";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 import ChannelNav from "~/components/layout/sidebar/Nav";
+import UseFirstChannel from "~/app/(client)/[org]/home/channels/hooks/first-channel";
 
 const People = () => {
   const [sidebarWidth, setSidebarWidth] = useState(270);
   const sidebarRef = useRef<HTMLDivElement | null>(null);
   const resizerRef = useRef<HTMLDivElement | null>(null);
+
+  const router = useRouter();
+  const params = useParams();
+  const orgSlug = params.org as string;
+  const { firstChannel } = UseFirstChannel();
+  const [resolvingChannel, setResolvingChannel] = useState(true);
 
   useEffect(() => {
     const minWidth = 250;
@@ -66,6 +74,63 @@ const People = () => {
   }, []);
 
   const isLargeScreen = windowWidth >= 1024;
+
+  // Self-heal an empty workspace route: when a user lands on /[org] with no
+  // channel selected (for example after a mobile org switch where the
+  // first-channel lookup exceeded resolveChannelIdForOrgSwitch's 1s budget),
+  // send them to their first channel instead of stranding them on this
+  // placeholder screen.
+  useEffect(() => {
+    let cancelled = false;
+
+    const resolveDefaultChannel = async () => {
+      const orgId = localStorage.getItem("orgId") || undefined;
+
+      if (!orgId || !orgSlug) {
+        setResolvingChannel(false);
+        return;
+      }
+
+      const channelId = await firstChannel(orgId);
+
+      if (cancelled) return;
+
+      if (channelId) {
+        router.replace(`/${orgSlug}/home/channels/${channelId}`);
+        return;
+      }
+
+      setResolvingChannel(false);
+    };
+
+    void resolveDefaultChannel();
+
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [orgSlug]);
+
+  if (resolvingChannel) {
+    return (
+      <>
+        <ChannelNav
+          resizerRef={resizerRef}
+          sidebarWidth={sidebarWidth}
+          sidebarRef={sidebarRef}
+        />
+        <div
+          className="mt-[60px] relative"
+          style={{ marginLeft: isLargeScreen ? `${sidebarWidth + 85}px` : 0 }}
+        >
+          <div className="h-[80vh] flex flex-col items-center justify-center gap-3">
+            <div className="size-8 animate-spin rounded-full border-2 border-blue-500 border-t-transparent" />
+            <p className="text-sm text-gray-500">Opening your workspace…</p>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
