@@ -180,15 +180,16 @@ const AboutPage = () => {
             </h2>
 
             <p className="max-w-2xl text-sm text-neutral-600 sm:text-base">
-              Modern learning programs were forced to rely on tools built for
-              workplaces or social chat. Important messages got buried. Cohort
-              discussions became messy. Structure was missing.
+              General chat tools weren&apos;t built for learning. When
+              announcements, assignment questions, and cohort chatter all live
+              in one noisy feed, students disengage and instructors spend more
+              time managing the conversation than teaching.
             </p>
 
             <p className="max-w-2xl text-sm text-neutral-600 sm:text-base">
-              We built Zedu to give educators a workspace designed specifically
-              for organized learning where every channel, cohort, and
-              conversation has purpose.
+              Zedu replaces that chaos with dedicated channels per subject and
+              lets educators control permissions. AI helps with moderation, so
+              the community stays organized as it grows.
             </p>
 
             <ArrowBtn text="Contact Sales" href="/contact-sales" inverted />
