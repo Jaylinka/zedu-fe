@@ -8,7 +8,7 @@ type PoweredByZeduProps = {
 const PoweredByZedu = ({ className }: PoweredByZeduProps) => {
   return (
     <a
-      href="https://zedu.chat/"
+      href="/"
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Powered by Zedu (opens in a new tab)"
