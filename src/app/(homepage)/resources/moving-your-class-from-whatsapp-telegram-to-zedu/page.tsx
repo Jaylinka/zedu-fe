@@ -12,25 +12,45 @@ export const metadata = {
 const GuidePage = () => {
   return (
     <section className="px-4 py-12 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-semibold mb-4">
-        MOVING YOUR CLASS FROM WHATSAPP/TELEGRAM TO ZEDU
-      </h1>
+      <header className="mb-8 text-center">
+        <h1 className="text-3xl font-semibold mb-3">
+          MOVING YOUR CLASS FROM
+          <span className="text-primary-500"> WHATSAPP/TELEGRAM</span>
+          <span className="text-neutral-900"> TO ZEDU</span>
+        </h1>
+        <p className="max-w-2xl mx-auto text-neutral-600">
+          If you teach in Nigeria or anywhere in Africa, your classroom may live
+          in a WhatsApp or Telegram group. It works at first — but convenience
+          becomes chaos. This guide explains why chat apps get messy for classes
+          and how to move to organised channels on
+          <span className="text-primary-500 font-semibold"> Zedu</span> without
+          losing students.
+        </p>
+      </header>
 
-      <p className="mb-4 text-neutral-700">
-        If you teach in Nigeria or anywhere else in Africa, there is a good
-        chance your classroom lives in a WhatsApp or Telegram group. It makes
-        sense. Everyone already has the app, data costs are manageable, and you
-        can start a class in minutes without asking anyone to sign up for
-        anything new.
-      </p>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div className="col-span-2 bg-white rounded-lg p-6 shadow-sm border border-primary-50">
+          <h2 className="text-lg font-semibold text-neutral-900 mb-2">
+            Why chat apps get messy for classes
+          </h2>
+          <p className="text-neutral-700">
+            What starts as a convenient shortcut slowly turns into a source of
+            stress for you and your students. Below are the common pain points
+            teachers face.
+          </p>
+        </div>
 
-      <p className="mb-4 text-neutral-700">
-        But if you have taught this way for more than a few weeks, you already
-        know the problem. What starts as a convenient shortcut slowly turns into
-        a source of stress for you and your students. This guide explains why
-        chat apps get messy for classes, and how to move your class to organised
-        channels on Zedu without losing your students along the way.
-      </p>
+        <div className="flex flex-col items-center justify-center bg-primary-50/40 rounded-lg p-4">
+          <img
+            src="/images/homepage/resources/image-5.jfif"
+            alt="class online"
+            className="rounded-md shadow-sm w-full h-auto object-cover mb-3"
+          />
+          <span className="bg-neutral-100 text-neutral-700 px-3 py-1 rounded-full text-sm">
+            Most popular
+          </span>
+        </div>
+      </div>
 
       <h2 className="text-xl font-semibold mt-6 mb-2">
         WHY CHAT APPS GET MESSY FOR CLASSES
@@ -40,23 +60,22 @@ const GuidePage = () => {
         <li>
           <strong>Messages get lost</strong>
           <p>
-            ...A student asks a question at 9 a.m. By noon, two hundred other
+            A student asks a question at 9 a.m. By noon, two hundred other
             messages have buried it. You never answer it, and the student stops
-            asking...
+            asking.
           </p>
         </li>
         <li>
           <strong>Everything is in one stream</strong>
           <p>
-            ...There are no topics, no sections and no way to tell what
-            matters...
+            There are no topics, no sections and no way to tell what matters.
           </p>
         </li>
         <li>
           <strong>Files get buried</strong>
           <p>
-            ...Slides, PDFs, past questions, recordings and reading lists are
-            shared once and then disappear into the chat history...
+            Slides, PDFs, past questions, recordings and reading lists are
+            shared once and then disappear into the chat history.
           </p>
         </li>
         <li>
