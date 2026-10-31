@@ -40,6 +40,11 @@ beforeEach(() => {
   globalThis.window = { localStorage: store };
 });
 
+test("public storage names remain compatible with existing saved attribution", () => {
+  assert.equal(CAMPAIGN_KEY, "zedu:campaign-attribution:v1");
+  assert.equal(CONSENT_KEY, "zedu:campaign-consent:v1");
+});
+
 test("does not capture until explicit consent", () => {
   assert.equal(captureCampaign(query, store, now, visit), undefined);
   assert.equal(values.has(CAMPAIGN_KEY), false);
@@ -118,9 +123,10 @@ test("cross-tab withdrawal is honored by the next payload", () => {
 test("failed analytics can retry and successful visits are sent once per runtime", async () => {
   setCampaignConsent("granted", store);
   const a = captureCampaign(query, store, now, visit);
-  process.env.NEXT_PUBLIC_BASE_URL = "https://api.example.test/api/v1";
+  process.env.NEXT_PUBLIC_BASE_URL = "/api/v1/";
   let calls = 0;
-  globalThis.fetch = async () => {
+  globalThis.fetch = async (url) => {
+    assert.equal(url, "/api/v1/campaign/visits");
     calls++;
     if (calls === 1) throw new Error("offline");
     return { ok: true };
@@ -129,4 +135,56 @@ test("failed analytics can retry and successful visits are sent once per runtime
   await reportCampaignVisit(a);
   await reportCampaignVisit(a);
   assert.equal(calls, 2);
+});
+
+test("empty optional UTM labels do not discard a valid campaign", () => {
+  setCampaignConsent("granted", store);
+  const a = captureCampaign(
+    "?utm_source=%20email%20&utm_medium=&utm_term=%20",
+    store,
+    now,
+    visit
+  );
+  assert.equal(a.utm_source, "email");
+  assert.equal(a.utm_medium, undefined);
+  assert.equal(a.utm_term, undefined);
+});
+
+test("stored payloads retain only contract fields and reject corrupt visit ids", () => {
+  setCampaignConsent("granted", store);
+  const a = captureCampaign(query, store, now, visit);
+  values.set(
+    CAMPAIGN_KEY,
+    JSON.stringify({ ...a, email: "private", token: "private" })
+  );
+  assert.deepEqual(campaignPayload(), { campaign: a });
+  values.set(
+    CAMPAIGN_KEY,
+    JSON.stringify({ ...a, visit_id: a.visit_id + "\n" })
+  );
+  assert.deepEqual(campaignPayload(), {});
+});
+
+test("withdrawal still prevents payloads and visit events when writes fail", async () => {
+  setCampaignConsent("granted", store);
+  const a = captureCampaign(query, store, now, () => crypto.randomUUID());
+  const readOnly = {
+    ...store,
+    setItem() {
+      throw new Error("read-only");
+    },
+    removeItem() {
+      throw new Error("read-only");
+    },
+  };
+  globalThis.window.localStorage = readOnly;
+  setCampaignConsent("denied", readOnly);
+  assert.deepEqual(campaignPayload(), {});
+  let calls = 0;
+  globalThis.fetch = async () => {
+    calls++;
+    return { ok: true };
+  };
+  await reportCampaignVisit(a);
+  assert.equal(calls, 0);
 });

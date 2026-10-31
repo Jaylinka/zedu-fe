@@ -1,5 +1,7 @@
-export const CAMPAIGN_KEY = "zedu:campaign-attribution:v1";
-export const CONSENT_KEY = "zedu:campaign-consent:v1";
+// Public, versioned storage namespaces. Existing saved choices keep their keys.
+const STORAGE_VERSION = 1;
+export const CAMPAIGN_KEY = `zedu:campaign-attribution:v${STORAGE_VERSION}`;
+export const CONSENT_KEY = `zedu:campaign-consent:v${STORAGE_VERSION}`;
 export const ATTRIBUTION_WINDOW = 30 * 24 * 60 * 60 * 1000;
 const fields = [
   "utm_source",
@@ -17,6 +19,7 @@ export type Campaign = Partial<Record<(typeof fields)[number], string>> & {
   consent: true;
 };
 export type Consent = "granted" | "denied" | "unknown";
+let fallbackConsent: Exclude<Consent, "unknown"> | undefined;
 
 function storage(): Storage | undefined {
   try {
@@ -26,6 +29,7 @@ function storage(): Storage | undefined {
   }
 }
 export function campaignConsent(store = storage()): Consent {
+  if (fallbackConsent) return fallbackConsent;
   try {
     const value = store?.getItem(CONSENT_KEY);
     return value === "granted" || value === "denied" ? value : "unknown";
@@ -37,11 +41,22 @@ export function setCampaignConsent(
   value: Exclude<Consent, "unknown">,
   store = storage()
 ) {
+  // Honor the current choice even if the browser refuses to persist it.
+  fallbackConsent = value;
   try {
-    store?.setItem(CONSENT_KEY, value);
-    if (value !== "granted") store?.removeItem(CAMPAIGN_KEY);
+    if (store) {
+      store.setItem(CONSENT_KEY, value);
+      fallbackConsent = undefined;
+    }
   } catch {
     /* optional storage */
+  }
+  if (value !== "granted") {
+    try {
+      store?.removeItem(CAMPAIGN_KEY);
+    } catch {
+      /* optional storage */
+    }
   }
 }
 export function validCampaign(
@@ -53,6 +68,7 @@ export function validCampaign(
   return (
     a.consent === true &&
     typeof a.visit_id === "string" &&
+    a.visit_id.length === 36 &&
     uuid.test(a.visit_id) &&
     Number.isSafeInteger(a.captured_at) &&
     a.captured_at <= now &&
@@ -77,7 +93,17 @@ export function readCampaign(
       return;
     }
     const value: unknown = JSON.parse(store?.getItem(CAMPAIGN_KEY) || "null");
-    if (validCampaign(value, now)) return value;
+    if (validCampaign(value, now)) {
+      const clean: Campaign = {
+        visit_id: value.visit_id,
+        captured_at: value.captured_at,
+        consent: true,
+      };
+      for (const field of fields) {
+        if (value[field] !== undefined) clean[field] = value[field];
+      }
+      return clean;
+    }
     store?.removeItem(CAMPAIGN_KEY);
   } catch {
     /* blocked/corrupt storage never affects the business flow */
@@ -101,7 +127,7 @@ export function captureCampaign(
     };
     for (const field of fields) {
       const raw = params.get(field);
-      if (raw !== null) value[field] = raw.trim();
+      if (raw?.trim()) value[field] = raw.trim();
     }
     if (!validCampaign(value, now)) return;
     store?.setItem(CAMPAIGN_KEY, JSON.stringify(value));
@@ -117,7 +143,8 @@ export function campaignPayload(): { campaign?: Campaign } {
 }
 const reported = new Set<string>();
 export async function reportCampaignVisit(campaign: Campaign) {
-  const base = process.env.NEXT_PUBLIC_BASE_URL;
+  if (campaignConsent() !== "granted" || !validCampaign(campaign)) return;
+  const base = process.env.NEXT_PUBLIC_BASE_URL?.replace(/\/+$/, "");
   if (!base || reported.has(campaign.visit_id)) return;
   try {
     const response = await fetch(`${base}/campaign/visits`, {
