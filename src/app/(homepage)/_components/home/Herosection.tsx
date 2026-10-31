@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Star } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { ArrowBtn, OutlineBtn } from "../ui/Button";
+import { storeRatings } from "~/lib/store-ratings";
 
 interface Metric {
   text: string;
@@ -151,7 +152,9 @@ const HeroSection = () => {
                 <Star key={i} color="gold" fill="gold" size={16} />
               ))}
           </div>
-          <span className="font-medium text-neutral-600">4.9</span>
+          <span className="font-medium text-neutral-600">
+            {storeRatings.play.rating} on {storeRatings.play.name}
+          </span>
         </div>
         <span className="hidden sm:inline" aria-hidden="true">
           |

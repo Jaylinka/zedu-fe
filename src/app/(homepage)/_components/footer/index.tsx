@@ -16,6 +16,7 @@ import {
   xUrl,
 } from "~/lib/env-urls";
 import { Loader2, Star } from "lucide-react";
+import { ratingSummary, storeRatings } from "~/lib/store-ratings";
 import { ZeduRoundedWhiteLogo, ZeduWhiteLogo } from "../svgs";
 
 type FooterLink = {
@@ -110,16 +111,12 @@ const appStoreLinks = [
     id: 0,
     store: "app" as const,
     icon: "/images/app-download/app-store-badge-2.png",
-    label: "App Store",
-    rating: "4.9",
     starKey: "app",
   },
   {
     id: 1,
     store: "play" as const,
     icon: "/images/app-download/google-play-badge-2.png",
-    label: "Play Store",
-    rating: "4.7",
     starKey: "play",
   },
 ];
@@ -297,8 +294,8 @@ const Footer = () => {
             </form>
 
             <div className="space-y-4">
-              <p className="text-white/90">
-                Mobile App is available on Google Play and the App Store
+              <p className="text-balance text-white/90">
+                Get the app on Google Play and the App Store
               </p>
               <div className="mt-5 flex flex-wrap items-start gap-8 text-white">
                 {appStoreLinks.map((store) => (
@@ -312,10 +309,12 @@ const Footer = () => {
                         src={store.icon}
                         width={24}
                         height={24}
-                        alt={store.label}
+                        alt={storeRatings[store.store].name}
                         className="h-6 w-6 rounded-md object-cover"
                       />
-                      <span className="font-medium">{store.label}</span>
+                      <span className="font-medium">
+                        {storeRatings[store.store].name}
+                      </span>
                     </div>
                     <div className="flex items-center gap-1">
                       {Array(5)
@@ -329,7 +328,7 @@ const Footer = () => {
                           />
                         ))}
                       <span className="ml-1 text-sm text-white/85">
-                        {store.rating}
+                        {ratingSummary(storeRatings[store.store])}
                       </span>
                     </div>
                   </Link>
