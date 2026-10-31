@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { campaignPayload } from "~/lib/campaign-attribution";
 import { Checkbox } from "~/components/ui/checkbox";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
@@ -63,7 +64,10 @@ function Login() {
     try {
       const id_token = response?.authorization?.id_token;
       if (!id_token) throw new Error("No id_token from Apple");
-      const res = await PostRequest("/auth/apple", { id_token });
+      const res = await PostRequest("/auth/apple", {
+        id_token,
+        ...campaignPayload(),
+      });
       if (res?.status === 200 || res?.status === 201) {
         const user = res?.data?.data?.user;
         const redirectUrl = searchParams.get("redirect") || "";
@@ -227,6 +231,7 @@ function Login() {
       try {
         const res = await PostRequest("/auth/google", {
           grant_code: code,
+          ...campaignPayload(),
         });
 
         if (res?.status === 200 || res?.status === 201) {
