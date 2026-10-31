@@ -4,7 +4,7 @@ import { useState } from "react";
 import { X } from "lucide-react";
 import Link from "next/link";
 import { cn } from "~/lib/utils";
-import { usePlanHref } from "../ui/Button";
+import { usePlanHref } from "../../_lib/usePlanHref";
 import {
   DialogClose,
   DialogContent,
