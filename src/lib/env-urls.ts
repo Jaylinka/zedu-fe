@@ -49,18 +49,20 @@ function storeBaseUrl(store: Store): string {
         clean(process.env.NEXT_PUBLIC_PLAY_STORE_URL);
 }
 
+function appStoreProviderToken(): string {
+  return (
+    readEnv("NEXT_PUBLIC_APP_STORE_PROVIDER_TOKEN") ||
+    clean(process.env.NEXT_PUBLIC_APP_STORE_PROVIDER_TOKEN)
+  );
+}
+
+/** Bare store URLs, untagged — for metadata and ID extraction, not marketing links. */
 export function appStoreUrl(): string {
   return storeBaseUrl("app");
 }
 
 export function playStoreUrl(): string {
   return storeBaseUrl("play");
-}
-function appStoreProviderToken(): string {
-  return (
-    readEnv("NEXT_PUBLIC_APP_STORE_PROVIDER_TOKEN") ||
-    clean(process.env.NEXT_PUBLIC_APP_STORE_PROVIDER_TOKEN)
-  );
 }
 
 /**
