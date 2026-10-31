@@ -7,6 +7,7 @@ import { WhyCard } from "~/app/(homepage)/_components/ui/WhyCard";
 import { FeaturedCard } from "~/app/(homepage)/_components/ui/FeaturedCard";
 import { ComparisonShowcase } from "~/app/(homepage)/_components/ui/ComparisonShowcase";
 import { DynamicFooter } from "../../_components/footer/dynamic-footer";
+import { BehaviorPersonalization } from "~/app/(homepage)/_components/bootcamps/BehaviorPersonalization";
 
 export const metadata: Metadata = {
   title: "Bootcamps Solutions",
@@ -137,7 +138,10 @@ const BootCampsSolutionsPage = () => {
               <span className="text-primary-500">Run faster cohorts </span>{" "}
               Build Stronger Communities
             </h1>
-            <p className="max-w-[46ch] text-sm leading-relaxed text-[#5a6170] sm:text-base">
+            <p
+              data-personalize="hero-subhead"
+              className="max-w-[46ch] text-sm leading-relaxed text-[#5a6170] sm:text-base"
+            >
               An all-in-one platform for bootcamps to manage cohorts, run live
               classes, support students, and build active learning communities.
             </p>
@@ -153,7 +157,10 @@ const BootCampsSolutionsPage = () => {
               <span className="text-[#8a90a0]">|</span>
               <span>Users love us</span>
             </div>{" "}
-            <div className="flex flex-wrap items-center justify-center gap-3 lg:justify-start">
+            <div
+              data-personalize="hero-ctas"
+              className="flex flex-wrap items-center justify-center gap-3 lg:justify-start"
+            >
               <ArrowBtn text="Book a Demo" href="/contact-sales" />
               <OutlineBtn text="Start for Free" href="/auth/sign-up" />
             </div>
@@ -218,7 +225,10 @@ const BootCampsSolutionsPage = () => {
           ))}
         </div>
       </section>
-      <section className="relative isolate overflow-hidden space-y-10 px-4 py-10 sm:px-6 sm:py-14 lg:px-10 lg:py-16">
+      <section
+        data-personalize="comparison"
+        className="relative isolate overflow-hidden space-y-10 px-4 py-10 sm:px-6 sm:py-14 lg:px-10 lg:py-16"
+      >
         <div className="flex flex-col items-center text-center gap-4">
           <h1 className="text-3xl font-semibold leading-tight text-[#1f2530] sm:text-4xl lg:text-[44px] lg:leading-[1.12]">
             How Zedu Transforms Bootcamps
@@ -295,10 +305,14 @@ const BootCampsSolutionsPage = () => {
         </div>
       </section>
 
-      <DynamicFooter
-        text="Power Your Next Bootcamp Cohort"
-        description="Give mentors, instructors, and students one organized platform for cohort management and collaboration."
-      />
+      <div data-personalize="final-cta">
+        <DynamicFooter
+          text="Power Your Next Bootcamp Cohort"
+          description="Give mentors, instructors, and students one organized platform for cohort management and collaboration."
+        />
+      </div>
+
+      <BehaviorPersonalization />
     </>
   );
 };
