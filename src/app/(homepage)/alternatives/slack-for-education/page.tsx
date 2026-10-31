@@ -80,9 +80,9 @@ export default function SlackForEducationPage() {
             Why Slack Doesn&apos;t Work for Schools &amp; Bootcamps
           </h2>
           <p className="mt-2 text-sm sm:text-base text-neutral-600">
-            Slack was engineered for enterprise enterprise sales teams, not
-            classroom pedagogy. Here is why educational institutions hit a brick
-            wall on Slack.
+            Slack was engineered for enterprise sales teams, not classroom
+            pedagogy. Here is why educational institutions hit a brick wall on
+            Slack.
           </p>
         </div>
 

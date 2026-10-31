@@ -70,8 +70,7 @@ export const MigrationPlaybook: React.FC<PlaybookProps> = ({ config }) => {
               return (
                 <div
                   key={s.step}
-                  onClick={() => setActiveStep(s.step)}
-                  className={`cursor-pointer p-4 rounded-2xl border transition-all text-left flex items-start gap-4 ${
+                  className={`p-4 rounded-2xl border transition-all text-left flex items-start gap-4 ${
                     isActive
                       ? "bg-neutral-800/90 border-primary-500 shadow-md shadow-primary-500/10"
                       : "bg-neutral-800/40 border-neutral-700/60 hover:bg-neutral-800/60"
@@ -79,34 +78,39 @@ export const MigrationPlaybook: React.FC<PlaybookProps> = ({ config }) => {
                 >
                   <button
                     type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleCheck(s.step);
-                    }}
-                    className={`mt-0.5 w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-colors ${
+                    onClick={() => toggleCheck(s.step)}
+                    aria-pressed={isChecked}
+                    aria-label={`Mark step ${s.step} as ${isChecked ? "incomplete" : "complete"}`}
+                    className={`mt-0.5 w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 ${
                       isChecked
                         ? "bg-emerald-500 text-white"
                         : "border-2 border-neutral-500 text-transparent"
                     }`}
-                    aria-label={`Toggle step ${s.step}`}
                   >
                     <Check className="w-3.5 h-3.5 stroke-[3]" />
                   </button>
 
-                  <div className="flex-1 min-w-0">
+                  <button
+                    type="button"
+                    onClick={() => setActiveStep(s.step)}
+                    aria-current={isActive ? "step" : undefined}
+                    className="flex-1 min-w-0 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-primary-400 rounded-lg group"
+                  >
                     <div className="flex items-center justify-between">
                       <span className="text-xs uppercase tracking-wider font-bold text-neutral-400">
                         Step {s.step} • {s.duration}
                       </span>
                     </div>
                     <h3
-                      className={`text-sm font-bold mt-0.5 truncate ${
-                        isActive ? "text-primary-300" : "text-white"
+                      className={`text-sm font-bold mt-0.5 truncate transition-colors ${
+                        isActive
+                          ? "text-primary-300"
+                          : "text-white group-hover:text-primary-200"
                       }`}
                     >
                       {s.title}
                     </h3>
-                  </div>
+                  </button>
                 </div>
               );
             })}

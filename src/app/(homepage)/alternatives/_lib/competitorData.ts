@@ -77,6 +77,7 @@ export type CompetitorPageConfig = {
     zeduCohortFlatAnnual: number;
     hiddenCostsDescription: string;
   };
+  budgetEliminations: string[];
   migrationPlaybook: {
     title: string;
     subtitle: string;
@@ -312,6 +313,12 @@ export const slackConfig: CompetitorPageConfig = {
     hiddenCostsDescription:
       "Plus Slack requires third-party Miro licenses ($16/mo/seat) and Zoom integrations ($15/mo) for whiteboard and large lectures.",
   },
+  budgetEliminations: [
+    "No $8.75/seat student tax",
+    "Free native whiteboard ($16/seat Miro saved)",
+    "Unlimited permanent message history",
+    "Built-in Buzz live class audio (no Zoom needed)",
+  ],
   migrationPlaybook: {
     title: "Migrate Your Class from Slack in Under 5 Minutes",
     subtitle:
@@ -688,6 +695,12 @@ export const discordConfig: CompetitorPageConfig = {
     hiddenCostsDescription:
       "While Discord is free, schools spend $1,200+/year on Server Boosts, Nitro storage, third-party whiteboard subscriptions, and lose hours managing bot permissions.",
   },
+  budgetEliminations: [
+    "No $1,200/yr Server Boosts required",
+    "Free native whiteboard (no third-party tool fees)",
+    "Zero gaming distractions or Nitro popups",
+    "Large file sharing without Nitro paywalls",
+  ],
   migrationPlaybook: {
     title: "Switch from Discord to Zedu in Under 5 Minutes",
     subtitle:

@@ -4,9 +4,8 @@ import type { CompetitorPageConfig } from "./competitorData";
 const SCHEMA_CONTEXT = "https://schema.org";
 
 /**
- * Builds comprehensive Schema.org JSON-LD for Competitor Comparison pages.
- * Includes Organization, Product with AggregateRating & Reviews, BreadcrumbList, and FAQPage.
- * Passes Google Rich Results validation.
+ * Builds Schema.org JSON-LD for Competitor Comparison pages.
+ * Includes Organization, WebPage, BreadcrumbList, Product, and FAQPage.
  */
 export function getCompetitorStructuredData(config: CompetitorPageConfig) {
   const pageUrl = siteUrl(config.meta.canonical);
@@ -69,13 +68,6 @@ export function getCompetitorStructuredData(config: CompetitorPageConfig) {
         applicationCategory: "EducationalApplication",
         operatingSystem: "Web, iOS, Android, macOS, Windows",
         url: pageUrl,
-        aggregateRating: {
-          "@type": "AggregateRating",
-          ratingValue: "4.9",
-          reviewCount: "142",
-          bestRating: "5",
-          worstRating: "1",
-        },
         offers: {
           "@type": "AggregateOffer",
           priceCurrency: "USD",
@@ -85,24 +77,6 @@ export function getCompetitorStructuredData(config: CompetitorPageConfig) {
           priceValidUntil: "2027-12-31",
           availability: "https://schema.org/InStock",
         },
-        review: config.testimonials.map((t) => ({
-          "@type": "Review",
-          reviewRating: {
-            "@type": "Rating",
-            ratingValue: "5",
-            bestRating: "5",
-          },
-          author: {
-            "@type": "Person",
-            name: t.author,
-            jobTitle: t.role,
-            worksFor: {
-              "@type": "Organization",
-              name: t.institution,
-            },
-          },
-          reviewBody: t.quote,
-        })),
       },
       {
         "@type": "FAQPage",
