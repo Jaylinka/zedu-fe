@@ -100,6 +100,11 @@ describe("MenuDropdown Leave channel (#1353)", () => {
       "eq",
       `/${SLUG}/home/channels/${GENERAL_CHANNEL}`
     );
+    // The sidebar Home link is built from channelId.
+    cy.window()
+      .its("localStorage")
+      .invoke("getItem", "channelId")
+      .should("eq", GENERAL_CHANNEL);
   });
 
   it("surfaces an error toast and stays on the channel when leave fails with 403", () => {

@@ -128,6 +128,18 @@ const MenuDropdown = ({ isOpen, onClose }: MenuDropdownProps) => {
           fallbackChannel?.channel_id ??
           fallbackChannel?.id;
 
+        // The sidebar Home link reads channelId, so it must not keep pointing
+        // at the channel that was just left.
+        if (nextChannelId) {
+          const nextChannelName = fallbackChannel?.name || "";
+          localStorage.setItem("channelId", nextChannelId);
+          localStorage.setItem("channelName", nextChannelName);
+          dispatch({ type: ACTIONS.CHANNEL_NAME, payload: nextChannelName });
+        } else {
+          localStorage.removeItem("channelId");
+          localStorage.removeItem("channelName");
+        }
+
         if (orgSlug && nextChannelId) {
           router.push(`/${orgSlug}/home/channels/${nextChannelId}`);
         } else if (orgSlug) {
