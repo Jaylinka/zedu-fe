@@ -378,6 +378,22 @@ const reducers = (state: any, action: any) => {
         ...state,
         notificationBadgeState: { count: 0 },
       };
+    case ACTIONS.MESSAGE_DELIVERY: {
+      const update = (messages: any[] = []) =>
+        messages.map((message) =>
+          message.isOptimistic &&
+          (message.id === action.payload.id ||
+            message.thread_id === action.payload.id)
+            ? { ...message, status: action.payload.status }
+            : message
+        );
+      return {
+        ...state,
+        messages: update(state.messages),
+        chats: update(state.chats),
+        replies: update(state.replies),
+      };
+    }
     case ACTIONS.MESSAGES:
       if (action.payload?.newMessage?.isOptimistic) {
         return {
