@@ -75,7 +75,10 @@ const InviteForm = () => {
         localStorage.setItem("orgSlug", orgSlug);
       }
 
-      router.push(`/${orgSlug}/invited`);
+      // The welcome page reads org_id to load the organisation's name.
+      router.push(
+        `/${orgSlug}/invited?org_id=${encodeURIComponent(res.data.data.user.current_org)}`
+      );
       return true;
     }
 
