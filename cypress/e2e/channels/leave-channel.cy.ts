@@ -31,7 +31,7 @@ describe("MenuDropdown Leave channel (#1353)", () => {
         data: { id: ORG, name: "Test Org", organisation_slug: SLUG },
       },
     });
-    cy.intercept("GET", new RegExp(`/organisations/${ORG}/channels`), {
+    cy.intercept("GET", new RegExp(`/organisations/${ORG}/user-channels$`), {
       body: {
         status: "success",
         data: [
@@ -93,9 +93,13 @@ describe("MenuDropdown Leave channel (#1353)", () => {
       },
     });
 
-    cy.contains("Leave channel").click({ force: true });
+    cy.get('button[aria-label="More actions"]').click();
+    cy.contains("Leave channel").click();
     cy.wait("@leaveChannel");
-    cy.location("pathname").should("not.include", PROJECT_CHANNEL);
+    cy.location("pathname").should(
+      "eq",
+      `/${SLUG}/home/channels/${GENERAL_CHANNEL}`
+    );
   });
 
   it("surfaces an error toast and stays on the channel when leave fails with 403", () => {
@@ -119,12 +123,19 @@ describe("MenuDropdown Leave channel (#1353)", () => {
       },
     });
 
-    cy.contains("Leave channel").click({ force: true });
+    cy.get('button[aria-label="More actions"]').click();
+    cy.contains("Leave channel").click();
     cy.wait("@leaveChannelForbidden");
     cy.location("pathname").should(
       "include",
       `/${SLUG}/home/channels/${PROJECT_CHANNEL}`
     );
+    cy.get("[data-sonner-toast]")
+      .should("have.length", 1)
+      .and(
+        "contain",
+        "Channel owners cannot leave without transferring ownership"
+      );
   });
 });
 

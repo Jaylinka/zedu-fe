@@ -135,7 +135,8 @@ const MenuDropdown = ({ isOpen, onClose }: MenuDropdownProps) => {
         } else {
           router.push("/");
         }
-      } else {
+      } else if (!res?.isAxiosError) {
+        // PostRequest already shows a toast for request errors it catches.
         const errorMessage =
           res?.response?.data?.message ||
           res?.data?.message ||
