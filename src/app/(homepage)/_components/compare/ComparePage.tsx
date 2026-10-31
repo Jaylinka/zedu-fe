@@ -1,86 +1,28 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
 import { Star } from "lucide-react";
-import { ogImageUrl, siteUrl } from "~/lib/env-urls";
+import { siteUrl } from "~/lib/env-urls";
 import { ArrowBtn, OutlineBtn } from "~/app/(homepage)/_components/ui/Button";
 import { ComparisonShowcase } from "~/app/(homepage)/_components/ui/ComparisonShowcase";
-import { FAQSection } from "../../_components/home/FAQSection";
-import { DynamicFooter } from "../../_components/footer/dynamic-footer";
-import { ComparisonTable } from "../../_components/compare/ComparisonTable";
-import { UseCaseCard } from "../../_components/compare/UseCaseCard";
-import { comparisons, type CompareContent } from "../../_lib/compare";
+import { FAQSection } from "../home/FAQSection";
+import { DynamicFooter } from "../footer/dynamic-footer";
+import { ComparisonTable } from "./ComparisonTable";
+import { UseCaseCard } from "./UseCaseCard";
+import {
+  discordComparison,
+  slackComparison,
+  type CompareContent,
+} from "../../_lib/compare";
 import type { CompareLink } from "../../_lib/compare/types";
 
 // schema.org's fixed vocabulary identifier required by JSON-LD (not a Zedu
 // URL, so it is not an environment value).
 const SCHEMA_CONTEXT = ["https:", "schema.org"].join("//");
 
-type ComparePageProps = {
-  params: Promise<{ slug: string }>;
-};
-
 const headingClass =
   "text-3xl font-semibold leading-tight text-[#1f2530] sm:text-4xl lg:text-[44px] lg:leading-[1.12]";
 const sectionClass =
   "relative isolate overflow-hidden space-y-10 px-4 py-10 sm:px-6 sm:py-14 lg:px-10 lg:py-16";
-
-export const dynamicParams = false;
-
-export function generateStaticParams() {
-  return Object.keys(comparisons).map((slug) => ({ slug }));
-}
-
-export async function generateMetadata({
-  params,
-}: ComparePageProps): Promise<Metadata> {
-  const { slug } = await params;
-  const content = comparisons[slug];
-  if (!content) return {};
-
-  const { meta } = content;
-  const url = siteUrl(`/compare/${slug}`);
-
-  return {
-    title: meta.title,
-    description: meta.description,
-    keywords: meta.keywords,
-    openGraph: {
-      title: meta.ogTitle,
-      description: meta.description,
-      url,
-      siteName: "Zedu",
-      images: [
-        {
-          url: ogImageUrl("og-image-5.png"),
-          width: 1200,
-          height: 630,
-          alt: meta.ogTitle,
-        },
-      ],
-      type: "website",
-      locale: "en_US",
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: meta.ogTitle,
-      description: meta.description,
-      images: [ogImageUrl("og-image-5.png")],
-    },
-    alternates: {
-      canonical: url,
-    },
-    robots: {
-      index: true,
-      follow: true,
-    },
-    category: "education",
-    applicationName: "Zedu",
-    creator: "Zedu",
-    publisher: "Zedu",
-  };
-}
 
 function getStructuredData(content: CompareContent) {
   return {
@@ -138,21 +80,22 @@ const LinkList = ({
   </p>
 );
 
-const ComparePage = async ({ params }: ComparePageProps) => {
-  const { slug } = await params;
-  const content = comparisons[slug];
-  if (!content) notFound();
-
+export const ComparePage = ({ content }: { content: CompareContent }) => {
   const { competitor, hero, intro, table, fits, useCases, faq, cta } = content;
-  const structuredData = JSON.stringify(getStructuredData(content)).replace(
-    /</g,
-    "\\u003c"
-  );
+  const structuredContent =
+    content.slug === discordComparison.slug
+      ? discordComparison
+      : slackComparison;
+  const structuredData = JSON.stringify(
+    getStructuredData(structuredContent)
+  ).replace(/</g, "\\u003c");
 
   return (
     <>
+      {/* JSON-LD built from our own static compare content, with "<" escaped. */}
       <script
         type="application/ld+json"
+        // nosemgrep: typescript.react.security.audit.react-dangerouslysetinnerhtml.react-dangerouslysetinnerhtml
         dangerouslySetInnerHTML={{ __html: structuredData }}
       />
 
@@ -309,5 +252,3 @@ const ComparePage = async ({ params }: ComparePageProps) => {
     </>
   );
 };
-
-export default ComparePage;
