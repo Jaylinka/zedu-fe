@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import Link from "next/link";
 import {
   CheckCircle2,
@@ -21,25 +21,41 @@ type MatrixProps = {
   config: CompetitorPageConfig;
 };
 
+const categoryLabels: Record<string, string> = {
+  organization: "Cohort & Structure",
+  collaboration: "Whiteboard & Tools",
+  communication: "Voice & Audio",
+  pricing: "Cost & Pricing",
+  security: "Safety & Privacy",
+};
+
 export const CompetitorComparisonMatrix: React.FC<MatrixProps> = ({
   config,
 }) => {
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [activeTooltip, setActiveTooltip] = useState<string | null>(null);
 
-  const categories = [
-    { key: "all", label: "All Features" },
-    { key: "organization", label: "Cohort & Structure" },
-    { key: "collaboration", label: "Whiteboard & Tools" },
-    { key: "communication", label: "Voice & Audio" },
-    { key: "pricing", label: "Cost & Pricing" },
-    { key: "security", label: "Safety & Privacy" },
-  ];
+  const categories = useMemo(() => {
+    const presentCategories = Array.from(
+      new Set(config.features.map((f) => f.category))
+    );
+    return [
+      { key: "all", label: "All Features" },
+      ...presentCategories.map((cat) => ({
+        key: cat,
+        label: categoryLabels[cat] || cat,
+      })),
+    ];
+  }, [config.features]);
+
+  const effectiveCategory = categories.some((c) => c.key === activeCategory)
+    ? activeCategory
+    : "all";
 
   const filteredFeatures =
-    activeCategory === "all"
+    effectiveCategory === "all"
       ? config.features
-      : config.features.filter((f) => f.category === activeCategory);
+      : config.features.filter((f) => f.category === effectiveCategory);
 
   const renderStatusIcon = (status: "yes" | "no" | "partial") => {
     switch (status) {
@@ -117,110 +133,129 @@ export const CompetitorComparisonMatrix: React.FC<MatrixProps> = ({
             </tr>
           </thead>
           <tbody className="divide-y divide-neutral-200 text-sm">
-            {filteredFeatures.map((item, index) => (
-              <tr
-                key={item.feature}
-                className={index % 2 === 0 ? "bg-white" : "bg-neutral-50/40"}
-              >
-                {/* Feature Name & Tooltip */}
-                <td className="py-4 px-6 align-top">
-                  <div className="flex items-start justify-between gap-2">
-                    <div>
-                      <span className="font-semibold text-neutral-900 block">
-                        {item.feature}
-                      </span>
-                      <p className="text-xs text-neutral-500 mt-0.5 leading-relaxed">
-                        {item.tooltip}
-                      </p>
-                    </div>
-                  </div>
-                </td>
-
-                {/* Zedu Column */}
-                <td className="py-4 px-6 align-top bg-primary-50/30 border-x border-primary-100/60">
-                  <div className="flex items-start gap-2.5">
-                    {renderStatusIcon(item.zedu.status)}
-                    <div>
-                      <span className="font-semibold text-neutral-900 block text-xs sm:text-sm">
-                        {item.zedu.label}
-                      </span>
-                      <span className="text-xs text-neutral-600 leading-relaxed block mt-0.5">
-                        {item.zedu.description}
-                      </span>
-                    </div>
-                  </div>
-                </td>
-
-                {/* Competitor Column */}
-                <td className="py-4 px-6 align-top">
-                  <div className="flex items-start gap-2.5">
-                    {renderStatusIcon(item.competitor.status)}
-                    <div>
-                      <span className="font-semibold text-neutral-800 block text-xs sm:text-sm">
-                        {item.competitor.label}
-                      </span>
-                      <span className="text-xs text-neutral-500 leading-relaxed block mt-0.5">
-                        {item.competitor.description}
-                      </span>
-                    </div>
-                  </div>
+            {filteredFeatures.length === 0 ? (
+              <tr>
+                <td
+                  colSpan={3}
+                  className="py-12 text-center text-sm text-neutral-500"
+                >
+                  No comparison features found in this category.
                 </td>
               </tr>
-            ))}
+            ) : (
+              filteredFeatures.map((item, index) => (
+                <tr
+                  key={item.feature}
+                  className={index % 2 === 0 ? "bg-white" : "bg-neutral-50/40"}
+                >
+                  {/* Feature Name & Tooltip */}
+                  <td className="py-4 px-6 align-top">
+                    <div className="flex items-start justify-between gap-2">
+                      <div>
+                        <span className="font-semibold text-neutral-900 block">
+                          {item.feature}
+                        </span>
+                        <p className="text-xs text-neutral-500 mt-0.5 leading-relaxed">
+                          {item.tooltip}
+                        </p>
+                      </div>
+                    </div>
+                  </td>
+
+                  {/* Zedu Column */}
+                  <td className="py-4 px-6 align-top bg-primary-50/30 border-x border-primary-100/60">
+                    <div className="flex items-start gap-2.5">
+                      {renderStatusIcon(item.zedu.status)}
+                      <div>
+                        <span className="font-semibold text-neutral-900 block text-xs sm:text-sm">
+                          {item.zedu.label}
+                        </span>
+                        <span className="text-xs text-neutral-600 leading-relaxed block mt-0.5">
+                          {item.zedu.description}
+                        </span>
+                      </div>
+                    </div>
+                  </td>
+
+                  {/* Competitor Column */}
+                  <td className="py-4 px-6 align-top">
+                    <div className="flex items-start gap-2.5">
+                      {renderStatusIcon(item.competitor.status)}
+                      <div>
+                        <span className="font-semibold text-neutral-800 block text-xs sm:text-sm">
+                          {item.competitor.label}
+                        </span>
+                        <span className="text-xs text-neutral-500 leading-relaxed block mt-0.5">
+                          {item.competitor.description}
+                        </span>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
 
       {/* Mobile Matrix Cards */}
       <div className="md:hidden space-y-4">
-        {filteredFeatures.map((item) => (
-          <div
-            key={item.feature}
-            className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm space-y-3"
-          >
-            <div>
-              <div className="flex items-center justify-between">
-                <h3 className="font-bold text-neutral-900 text-sm">
-                  {item.feature}
-                </h3>
-                <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-neutral-100 text-neutral-600">
-                  {item.category}
-                </span>
-              </div>
-              <p className="text-xs text-neutral-500 mt-1">{item.tooltip}</p>
-            </div>
-
-            {/* Zedu Advantage */}
-            <div className="p-3 rounded-xl bg-primary-50/70 border border-primary-200/60 space-y-1">
-              <div className="flex items-center gap-2">
-                {renderStatusIcon(item.zedu.status)}
-                <span className="text-xs font-bold text-primary-900">Zedu</span>
-                <span className="text-xs font-semibold text-neutral-900">
-                  • {item.zedu.label}
-                </span>
-              </div>
-              <p className="text-xs text-neutral-700 pl-7">
-                {item.zedu.description}
-              </p>
-            </div>
-
-            {/* Competitor */}
-            <div className="p-3 rounded-xl bg-neutral-50 border border-neutral-200 space-y-1">
-              <div className="flex items-center gap-2">
-                {renderStatusIcon(item.competitor.status)}
-                <span className="text-xs font-bold text-neutral-700">
-                  {config.name}
-                </span>
-                <span className="text-xs font-semibold text-neutral-800">
-                  • {item.competitor.label}
-                </span>
-              </div>
-              <p className="text-xs text-neutral-500 pl-7">
-                {item.competitor.description}
-              </p>
-            </div>
+        {filteredFeatures.length === 0 ? (
+          <div className="py-8 text-center text-sm text-neutral-500 rounded-2xl border border-neutral-200 bg-white p-6">
+            No comparison features found in this category.
           </div>
-        ))}
+        ) : (
+          filteredFeatures.map((item) => (
+            <div
+              key={item.feature}
+              className="rounded-2xl border border-neutral-200 bg-white p-5 shadow-sm space-y-3"
+            >
+              <div>
+                <div className="flex items-center justify-between">
+                  <h3 className="font-bold text-neutral-900 text-sm">
+                    {item.feature}
+                  </h3>
+                  <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-neutral-100 text-neutral-600">
+                    {item.category}
+                  </span>
+                </div>
+                <p className="text-xs text-neutral-500 mt-1">{item.tooltip}</p>
+              </div>
+
+              {/* Zedu Advantage */}
+              <div className="p-3 rounded-xl bg-primary-50/70 border border-primary-200/60 space-y-1">
+                <div className="flex items-center gap-2">
+                  {renderStatusIcon(item.zedu.status)}
+                  <span className="text-xs font-bold text-primary-900">
+                    Zedu
+                  </span>
+                  <span className="text-xs font-semibold text-neutral-900">
+                    • {item.zedu.label}
+                  </span>
+                </div>
+                <p className="text-xs text-neutral-700 pl-7">
+                  {item.zedu.description}
+                </p>
+              </div>
+
+              {/* Competitor */}
+              <div className="p-3 rounded-xl bg-neutral-50 border border-neutral-200 space-y-1">
+                <div className="flex items-center gap-2">
+                  {renderStatusIcon(item.competitor.status)}
+                  <span className="text-xs font-bold text-neutral-700">
+                    {config.name}
+                  </span>
+                  <span className="text-xs font-semibold text-neutral-800">
+                    • {item.competitor.label}
+                  </span>
+                </div>
+                <p className="text-xs text-neutral-500 pl-7">
+                  {item.competitor.description}
+                </p>
+              </div>
+            </div>
+          ))
+        )}
       </div>
 
       {/* Footer CTA */}

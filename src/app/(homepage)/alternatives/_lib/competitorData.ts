@@ -661,6 +661,24 @@ export const discordConfig: CompetitorPageConfig = {
           "Complex permission setup requiring community bot configurations.",
       },
     },
+    {
+      feature: "Pricing Model & Hidden Add-ons",
+      category: "pricing",
+      tooltip:
+        "Discord requires costly server boosts, Nitro subscriptions, and third-party bot fees.",
+      zedu: {
+        status: "yes",
+        label: "Flat Cohort Rate (Free Tier Available)",
+        description:
+          "Predictable flat cohort pricing with no required server boosts or student subscriptions.",
+      },
+      competitor: {
+        status: "partial",
+        label: "Free with Hidden Costs ($1,200+/yr)",
+        description:
+          "Requires Level 3 Server Boosts ($100/mo) for audio quality and 3rd-party whiteboard tools.",
+      },
+    },
   ],
   tco: {
     competitorName: "Discord Server + Add-ons",
