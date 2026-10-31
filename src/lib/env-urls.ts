@@ -116,6 +116,16 @@ export function pageCampaign(pathname: string | null | undefined): string {
   return slug || "home";
 }
 
+/** Numeric App Store id from NEXT_PUBLIC_APP_STORE_URL (".../id1234567890"). */
+export function appStoreAppId(): string {
+  return appStoreUrl().match(/\/id(\d+)/)?.[1] ?? "";
+}
+
+/** Android package name from NEXT_PUBLIC_PLAY_STORE_URL ("...?id=net.example.app"). */
+export function playStorePackageId(): string {
+  return playStoreUrl().match(/[?&]id=([\w.]+)/)?.[1] ?? "";
+}
+
 export function gtmScriptUrl(): string {
   return readEnv("NEXT_PUBLIC_GTM_SCRIPT_URL");
 }
