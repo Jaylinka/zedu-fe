@@ -3,12 +3,13 @@
  *
  * There is no API to fetch these at build time, so they are copied by hand from the store
  * pages. Update `lastChecked` whenever you change a number.
- * - App Store: https://itunes.apple.com/lookup?id=6759181591&country=ng
- *   (`averageUserRating` and `userRatingCount`)
+ * - App Store: the iTunes lookup API for the app id from `appStoreAppId()` in `~/lib/env-urls`
+ *   (`averageUserRating` and `userRatingCount`).
  * - Google Play: the store page itself; there is no official API.
  *
- * `sourceUrl` is where the numbers were read. The store links people click still come from
- * `storeLink()` in `~/lib/env-urls`.
+ * The store pages come from `appStoreUrl()` and `playStoreUrl()` in `~/lib/env-urls`, which
+ * read NEXT_PUBLIC_APP_STORE_URL and NEXT_PUBLIC_PLAY_STORE_URL. The links people click come
+ * from `storeLink()` in the same file.
  */
 export type StoreKey = "app" | "play";
 
@@ -22,7 +23,6 @@ export type StoreRating = {
   countLabel: string;
   /** Date the numbers were last compared with the store page (YYYY-MM-DD). */
   lastChecked: string;
-  sourceUrl: string;
 };
 
 export const storeRatings: Record<StoreKey, StoreRating> = {
@@ -32,7 +32,6 @@ export const storeRatings: Record<StoreKey, StoreRating> = {
     count: 1,
     countLabel: "rating",
     lastChecked: "2026-10-31",
-    sourceUrl: "https://apps.apple.com/ng/app/zedu-app/id6759181591",
   },
   play: {
     name: "Google Play",
@@ -40,7 +39,6 @@ export const storeRatings: Record<StoreKey, StoreRating> = {
     count: 11,
     countLabel: "review",
     lastChecked: "2026-10-31",
-    sourceUrl: "https://play.google.com/store/apps/details?id=net.emerj.zedu",
   },
 };
 
