@@ -28,7 +28,7 @@ const compiled = outputText.replace(
   `from ${JSON.stringify(import.meta.resolve("rehype-sanitize"))}`
 );
 const encoded = Buffer.from(compiled).toString("base64");
-const { messageSanitizeSchema } = await import(
+const { messageSanitizeSchema, rehypeEmojiImagesOnly } = await import(
   `data:text/javascript;base64,${encoded}`
 );
 
@@ -148,4 +148,44 @@ test("keeps apple emoji images but not arbitrary classes", () => {
 
   const other = render(fixtures.arbitraryClassSpan);
   assert.doesNotMatch(other, /fixed|inset-0|z-50/);
+});
+
+// Same plugin chain as the channel message and delete-message renderers.
+const EMOJI_BASE = "https://cdn.example";
+const renderWithImageFilter = (markdown, emojiBase = EMOJI_BASE) =>
+  renderToStaticMarkup(
+    React.createElement(
+      ReactMarkdown,
+      {
+        remarkPlugins: [remarkGfm],
+        rehypePlugins: [
+          rehypeRaw,
+          [rehypeSanitize, messageSanitizeSchema],
+          rehypeEmojiImagesOnly(emojiBase),
+        ],
+      },
+      markdown
+    )
+  );
+
+test("keeps apple emoji images from the emoji datasource only", () => {
+  const emoji = `<img class="apple-emoji-img" alt="😀" src="${fixtures.emojiSrc}" draggable="false" />`;
+  const html = renderWithImageFilter(
+    `<p>hi ${emoji}` +
+      '<img src="https://tracker.example/pixel.png">' +
+      '<img class="apple-emoji-img" src="https://tracker.example/fake.png">' +
+      '<img class="apple-emoji-img" src="https://cdn.example.evil/x.png">' +
+      "</p>\n\n![md](https://tracker.example/md.png)"
+  );
+  assert.ok(html.includes(`src="${fixtures.emojiSrc}"`));
+  assert.doesNotMatch(html, /tracker\.example|cdn\.example\.evil/);
+  assert.equal((html.match(/<img/g) ?? []).length, 1);
+});
+
+test("removes every image when no emoji datasource is configured", () => {
+  const html = renderWithImageFilter(
+    `<img class="apple-emoji-img" alt="😀" src="${fixtures.emojiSrc}" />`,
+    ""
+  );
+  assert.doesNotMatch(html, /<img/);
 });
