@@ -17,8 +17,17 @@ import OrganisationMenu from "~/app/(client)/[org]/_components/org-dropdown";
 import { cn } from "~/lib/utils";
 import UserAvatar from "~/components/layout/user-avatar";
 import { GetRequest } from "~/utils/new-request";
+import { getShowMessagePreviews } from "~/lib/notification-preview";
 
 const LIMIT = 20;
+
+// Hidden-preview text; keeps the sender name for "(name): ..." messages.
+const hiddenPreviewText = (message?: string) => {
+  const match = /^\(([^)]+)\):/.exec(message ?? "");
+  return match
+    ? match[1] + " sent a message. Click to view."
+    : "Sent a message. Click to view.";
+};
 
 export default function NotificationNav() {
   const { state, dispatch } = useContext(DataContext);
@@ -28,6 +37,11 @@ export default function NotificationNav() {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [showPreviews, setShowPreviews] = useState(true);
+
+  useEffect(() => {
+    setShowPreviews(getShowMessagePreviews());
+  }, []);
 
   const resolvedOrgId =
     orgId ||
@@ -172,7 +186,13 @@ export default function NotificationNav() {
                       </span>
                     </div>
                     <p className="line-clamp-2 max-w-[220px] break-words text-[14px] text-[#D0D0FD]">
-                      {item.message}
+                      {showPreviews ? (
+                        item.message
+                      ) : (
+                        <span className="italic">
+                          {hiddenPreviewText(item.message)}
+                        </span>
+                      )}
                     </p>
                   </div>
                 </button>
