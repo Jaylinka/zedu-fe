@@ -22,8 +22,9 @@ export function ogImageUrl(fileName: string): string {
   return `${readEnv("NEXT_PUBLIC_MEDIA_URL")}/telexprodbucket/public/og-images/${fileName}`;
 }
 
+// Called from the client-side Contact Sales form, so it reads the variable in full.
 export function contactSalesUrl(): string {
-  return `${readEnv("NEXT_PUBLIC_BASE_URL")}/contact`;
+  return `${clean(process.env.NEXT_PUBLIC_BASE_URL)}/contact`;
 }
 
 type Store = "app" | "play";
@@ -49,19 +50,20 @@ function storeBaseUrl(store: Store): string {
         clean(process.env.NEXT_PUBLIC_PLAY_STORE_URL);
 }
 
+function appStoreProviderToken(): string {
+  return (
+    readEnv("NEXT_PUBLIC_APP_STORE_PROVIDER_TOKEN") ||
+    clean(process.env.NEXT_PUBLIC_APP_STORE_PROVIDER_TOKEN)
+  );
+}
+
+/** Bare store URLs, untagged — for metadata and ID extraction, not marketing links. */
 export function appStoreUrl(): string {
   return storeBaseUrl("app");
 }
 
 export function playStoreUrl(): string {
   return storeBaseUrl("play");
-}
-
-function appStoreProviderToken(): string {
-  return (
-    readEnv("NEXT_PUBLIC_APP_STORE_PROVIDER_TOKEN") ||
-    clean(process.env.NEXT_PUBLIC_APP_STORE_PROVIDER_TOKEN)
-  );
 }
 
 /**
@@ -192,8 +194,9 @@ export function officeEmbedUrl(fileUrl: string): string | null {
   return `${base}?src=${encodeURIComponent(fileUrl)}`;
 }
 
+// Called from client components (the Files page owner avatars), so it reads the variable in full.
 export function uiAvatarUrl(name: string): string {
-  return `${readEnv("NEXT_PUBLIC_UI_AVATARS_URL")}?name=${encodeURIComponent(name)}`;
+  return `${clean(process.env.NEXT_PUBLIC_UI_AVATARS_URL)}?name=${encodeURIComponent(name)}`;
 }
 
 export function instagramUrl(): string {
