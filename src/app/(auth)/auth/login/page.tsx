@@ -11,6 +11,7 @@ import { showError } from "~/components/toast/sonner";
 import { PostRequest } from "~/utils/request";
 import Loading from "~/components/ui/loading";
 import { LoginWebhookRequest } from "~/utils/webhook-request";
+import { getSafeRedirect } from "~/utils/safe-redirect";
 import { useGoogleLogin } from "@react-oauth/google";
 import AppleSignin from "react-apple-signin-auth";
 import { Separator } from "~/components/ui/separator";
@@ -66,7 +67,7 @@ function Login() {
       const res = await PostRequest("/auth/apple", { id_token });
       if (res?.status === 200 || res?.status === 201) {
         const user = res?.data?.data?.user;
-        const redirectUrl = searchParams.get("redirect") || "";
+        const redirectUrl = getSafeRedirect(searchParams.get("redirect"));
         localStorage.setItem("token", res?.data?.data?.access_token);
         localStorage.setItem("useremail", user?.email);
         localStorage.setItem("user", JSON.stringify(user));
@@ -140,7 +141,7 @@ function Login() {
         password,
       };
 
-      const redirectUrl = searchParams.get("redirect") || "";
+      const redirectUrl = getSafeRedirect(searchParams.get("redirect"));
       const coworkerId = searchParams.get("coworkerId") || "";
 
       const res = await PostRequest("/auth/login", payload);
@@ -231,7 +232,7 @@ function Login() {
 
         if (res?.status === 200 || res?.status === 201) {
           const user = res?.data?.data?.user;
-          const redirectUrl = searchParams.get("redirect") || "";
+          const redirectUrl = getSafeRedirect(searchParams.get("redirect"));
 
           localStorage.setItem("token", res?.data?.data?.access_token);
           localStorage.setItem("useremail", user?.email);
