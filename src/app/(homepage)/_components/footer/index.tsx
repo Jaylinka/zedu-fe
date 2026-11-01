@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { isValidEmail } from "~/lib/utils";
 import React, { useId, useState } from "react";
 import Image from "next/image";
@@ -258,7 +258,7 @@ const Footer = () => {
                   ) : (
                     <>
                       <span>Subscribe</span>
-                      <span className="text-sm font-semibold">â†’</span>
+                      <span className="text-sm font-semibold">→</span>
                     </>
                   )}
                 </button>
@@ -353,7 +353,7 @@ const Footer = () => {
             </div>
             <div className="flex flex-col gap-1 text-white/95">
               <span className="font-semibold leading-none tracking-[-0.02em]">
-                Â© 2026 Zedu. All Rights Reserved
+                © 2026 Zedu. All Rights Reserved
               </span>
               <Link
                 href="mailto:contact@zedu.chat"
