@@ -73,8 +73,10 @@ const resourcesLinks: FooterLink[] = [
     href: "/alternatives/google-classroom",
   },
   { id: 3, label: "Compare Zedu", href: "/compare" },
-  { id: 4, label: "Privacy Policy", href: "/policy" },
-  { id: 5, label: "Terms of Service", href: "/terms-of-service" },
+  { id: 4, label: "Zedu vs Discord", href: "/compare/zedu-vs-discord" },
+  { id: 5, label: "Zedu vs Slack", href: "/compare/zedu-vs-slack" },
+  { id: 6, label: "Privacy Policy", href: "/policy" },
+  { id: 7, label: "Terms of Service", href: "/terms-of-service" },
 ];
 
 const footerSections = [
