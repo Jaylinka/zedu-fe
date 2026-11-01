@@ -75,8 +75,13 @@ const resourcesLinks: FooterLink[] = [
   { id: 3, label: "Compare Zedu", href: "/compare" },
   { id: 4, label: "Zedu vs Discord", href: "/compare/zedu-vs-discord" },
   { id: 5, label: "Zedu vs Slack", href: "/compare/zedu-vs-slack" },
-  { id: 6, label: "Privacy Policy", href: "/policy" },
-  { id: 7, label: "Terms of Service", href: "/terms-of-service" },
+  {
+    id: 6,
+    label: "Zedu vs WhatsApp & Telegram",
+    href: "/resources?guide=zedu-vs-whatsapp-telegram-for-bootcamps",
+  },
+  { id: 7, label: "Privacy Policy", href: "/policy" },
+  { id: 8, label: "Terms of Service", href: "/terms-of-service" },
 ];
 
 const footerSections = [
