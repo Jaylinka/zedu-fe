@@ -114,17 +114,17 @@ const socialLinks = [
 
 const appStoreLinks = [
   {
-  id: 0,
-  store: "app" as const,
-  icon: "/images/app-download/app-store-badge-2.png",
-  label: "App Store",
-},
-{
-  id: 1,
-  store: "play" as const,
-  icon: "/images/app-download/google-play-badge-2.png",
-  label: "Google Play",
-},
+    id: 0,
+    store: "app" as const,
+    icon: "/images/app-download/app-store-badge-2.png",
+    label: "App Store",
+  },
+  {
+    id: 1,
+    store: "play" as const,
+    icon: "/images/app-download/google-play-badge-2.png",
+    label: "Google Play",
+  },
 ];
 
 const plusJakartaSans = Plus_Jakarta_Sans({ subsets: ["latin"] });
@@ -298,21 +298,23 @@ const Footer = () => {
                       />
                       <span className="font-medium">{store.label}</span>
                     </div>
-                    <div className="flex items-center gap-1">
-                      {Array(5)
-                        .fill(0)
-                        .map((_, i) => (
-                          <Star
-                            key={`${store.starKey}-star-${i}`}
-                            color="gold"
-                            fill="gold"
-                            size={12}
-                          />
-                        ))}
-                      <span className="ml-1 text-sm text-white/85">
-                        {store.rating}
-                      </span>
-                    </div>
+                    {"starKey" in store && "rating" in store ? (
+                      <div className="flex items-center gap-1">
+                        {Array(5)
+                          .fill(0)
+                          .map((_, i) => (
+                            <Star
+                              key={`${(store as { starKey: string }).starKey}-star-${i}`}
+                              color="gold"
+                              fill="gold"
+                              size={12}
+                            />
+                          ))}
+                        <span className="ml-1 text-sm text-white/85">
+                          {(store as { rating: string }).rating}
+                        </span>
+                      </div>
+                    ) : null}
                   </Link>
                 ))}
               </div>
