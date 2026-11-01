@@ -273,18 +273,18 @@ export function CohortCommunicationHealthCheck() {
 
   return (
     <main className="min-h-[calc(100vh-3rem)] bg-gradient-to-b from-violet-50 via-white to-white px-4 py-10 sm:px-6 sm:py-16">
-      <div className="mx-auto max-w-5xl">
+      <div className="mx-auto w-full min-w-0 max-w-5xl">
         <p className="mb-6 text-sm font-semibold text-violet-700">
           A free, practical self-assessment
         </p>
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_300px] lg:items-start">
-          <section className="rounded-3xl border border-slate-200 bg-white p-5 shadow-xl shadow-slate-200/50 sm:p-8">
+        <div className="grid min-w-0 gap-8 lg:grid-cols-[minmax(0,1fr)_300px] lg:items-start">
+          <section className="w-full min-w-0 rounded-3xl border border-slate-200 bg-white p-5 shadow-xl shadow-slate-200/50 sm:p-8">
             {!started ? (
               <div className="py-3 sm:py-8">
                 <p className="mb-4 text-xs font-bold uppercase tracking-wide text-violet-700">
                   About 3 minutes · 8 questions
                 </p>
-                <h1 className="max-w-2xl text-3xl font-bold tracking-tight text-slate-950 sm:text-5xl">
+                <h1 className="max-w-2xl break-words text-3xl font-bold tracking-tight text-slate-950 sm:text-5xl">
                   How healthy is communication in your cohort?
                 </h1>
                 <p className="mt-5 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">
@@ -543,7 +543,7 @@ export function CohortCommunicationHealthCheck() {
             )}
           </section>
 
-          <aside className="rounded-3xl border border-violet-100 bg-violet-50 p-5 sm:p-7">
+          <aside className="w-full min-w-0 rounded-3xl border border-violet-100 bg-violet-50 p-5 sm:p-7">
             <p className="text-sm font-bold uppercase tracking-wide text-violet-800">
               Your cohort, better connected
             </p>
