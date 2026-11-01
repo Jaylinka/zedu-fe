@@ -70,7 +70,7 @@ const higherEducationCards = [
 const structuredCommunicationCards = [
   {
     title: "Organised Classroom Communication",
-    desc: "Structure lessons, announcements, and discussions for easy access of information",
+    desc: "Structure lessons, announcements, and discussions for easy access to information",
     image:
       "/images/homepage/solutions/schools/organised-classroom-communication.png",
   },
