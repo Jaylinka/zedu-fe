@@ -1154,6 +1154,12 @@ const reducers = (state: any, action: any) => {
       }
       return state;
     }
+    case ACTIONS.CHANNEL_UNREAD_COUNT:
+      return {
+        ...state,
+        channelUnreadCount:
+          typeof payload === "number" ? payload : state.channelUnreadCount,
+      };
     case ACTIONS.UPDATE_DM_COUNT: {
       const updatedChannelId = action.payload.channel_id;
 
