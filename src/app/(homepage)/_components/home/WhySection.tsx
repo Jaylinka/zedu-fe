@@ -76,7 +76,7 @@ export const WhySection = () => {
               </h2>
             </div>
             <div className="mt-1">
-              <ArrowBtn text="Get started for free" linkToHome />
+              <ArrowBtn text="Set up your learning space" linkToHome />
             </div>
           </div>
 

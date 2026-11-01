@@ -25,7 +25,7 @@ export const FeatureSection = () => {
             workspace.
           </p>
           <div>
-            <ArrowBtn text="Get started for free" linkToHome />
+            <ArrowBtn text="Create your free workspace" linkToHome />
           </div>
         </div>
 
@@ -104,7 +104,7 @@ export const FeatureSection = () => {
                 />
               </div>
               <div className="mt-1">
-                <ArrowBtn text="Get started for free" linkToHome />
+                <ArrowBtn text="Bring your class to Zedu" linkToHome />
               </div>
             </div>
 
