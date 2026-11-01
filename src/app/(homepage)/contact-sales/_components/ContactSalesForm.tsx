@@ -191,7 +191,12 @@ export const ContactSalesForm = () => {
         body: JSON.stringify(contactData),
       });
 
-      if (!response.ok) {
+      // Only the API's JSON reply counts: an HTML page that answers 200 means
+      // the request never reached the API.
+      const isApiReply = response.headers
+        .get("content-type")
+        ?.includes("application/json");
+      if (!response.ok || !isApiReply) {
         throw new Error("Failed to send message");
       }
 
