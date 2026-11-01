@@ -50,15 +50,6 @@ function storeBaseUrl(store: Store): string {
         clean(process.env.NEXT_PUBLIC_PLAY_STORE_URL);
 }
 
-/** Canonical store URLs, without campaign tags (e.g. manifest and app IDs). */
-export function appStoreUrl(): string {
-  return storeBaseUrl("app");
-}
-
-export function playStoreUrl(): string {
-  return storeBaseUrl("play");
-}
-
 function appStoreProviderToken(): string {
   return (
     readEnv("NEXT_PUBLIC_APP_STORE_PROVIDER_TOKEN") ||
