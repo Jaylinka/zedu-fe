@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { JSX, useEffect, useState } from "react";
 import { cn } from "~/lib/utils";
-import { GooglePlayStoreOutlineIcon, AppleStoreOutlineIcon } from "../svgs";
+import { GooglePlayColorIcon, AppleLogoIcon } from "../svgs";
 
 export const OutlineBtn = ({
   text,
@@ -131,11 +131,11 @@ export const DownloadAppBtn = ({
   inverted?: boolean;
 }) => {
   const iconMap: Record<string, (props?: { color?: string }) => JSX.Element> = {
-    google: GooglePlayStoreOutlineIcon,
-    apple: AppleStoreOutlineIcon,
+    google: GooglePlayColorIcon,
+    apple: AppleLogoIcon,
   };
 
-  const LeftIcon = iconMap[leftIcon as string] || GooglePlayStoreOutlineIcon;
+  const LeftIcon = iconMap[leftIcon as string] || GooglePlayColorIcon;
 
   return (
     <Link
