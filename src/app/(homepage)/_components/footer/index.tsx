@@ -23,13 +23,12 @@ type FooterLink = {
   label: string;
   href: string;
 };
-
 const productLinks: FooterLink[] = [
   { id: 0, label: "Buzz", href: "/products/buzz" },
   { id: 1, label: "Channels", href: "/products/channels" },
   { id: 2, label: "File Management", href: "/products/file-management" },
+  { id: 3, label: "AI Assistant", href: "/products/ai" },
 ];
-
 const solutionLinks: FooterLink[] = [
   { id: 0, label: "Bootcamps", href: "/solutions/bootcamps" },
   { id: 1, label: "Schools", href: "/solutions/schools" },
