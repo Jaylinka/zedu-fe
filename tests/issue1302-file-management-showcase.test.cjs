@@ -10,7 +10,7 @@ const pagePath = path.join(
   "(homepage)",
   "products",
   "file-management",
-  "page.tsx",
+  "page.tsx"
 );
 const page = fs.readFileSync(pagePath, "utf8");
 
@@ -18,20 +18,20 @@ const page = fs.readFileSync(pagePath, "utf8");
 assert.match(
   page,
   /title:\s*"Channels"[\s\S]*?icon:\s*"\/images\/homepage\/icons\/messaging-system\.png"/,
-  "The Channels feature card must use '/images/homepage/icons/messaging-system.png'.",
+  "The Channels feature card must use '/images/homepage/icons/messaging-system.png'."
 );
 
 assert.doesNotMatch(
   page,
   /title:\s*"Channels"[\s\S]*?icon:\s*"\/images\/homepage\/icons\/file-management\.png"/,
-  "The Channels feature card must not reuse the file-management icon.",
+  "The Channels feature card must not reuse the file-management icon."
 );
 
 // 2. Verify preload attribute is not passed to Image in otherFeatures
 assert.doesNotMatch(
   page,
   /<Image[\s\S]*?alt=\{`\$\{feature\.title\} icon`\}[\s\S]*?\bpreload\b/,
-  "The otherFeatures Image element must not pass an invalid preload attribute.",
+  "The otherFeatures Image element must not pass an invalid preload attribute."
 );
 
 // 3. Verify all feature icons exist in public directory
@@ -41,7 +41,7 @@ const iconMatches = [
 ];
 assert.ok(
   iconMatches.length >= 4,
-  "Should find at least 4 feature card icons.",
+  "Should find at least 4 feature card icons."
 );
 
 for (const match of iconMatches) {
@@ -49,7 +49,7 @@ for (const match of iconMatches) {
   const iconDiskPath = path.join(publicDir, iconRelPath);
   assert.ok(
     fs.existsSync(iconDiskPath),
-    `Feature icon must exist on disk: ${iconDiskPath}`,
+    `Feature icon must exist on disk: ${iconDiskPath}`
   );
 }
 
@@ -57,7 +57,7 @@ for (const match of iconMatches) {
 assert.match(
   page,
   /alt="Zedu file management interface showing course materials, lecture folders, and shared cohort resources"/,
-  "Hero image alt text must remain intact.",
+  "Hero image alt text must remain intact."
 );
 
 const h1Count = (page.match(/<h1\b/g) ?? []).length;
