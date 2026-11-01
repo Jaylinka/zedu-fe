@@ -269,7 +269,7 @@ const HeroSection = () => {
       <div className="relative w-full max-w-6xl overflow-hidden rounded-2xl border border-neutral-200/80 shadow-lg">
         <div className="relative aspect-[16/10] w-full sm:aspect-[16/9] lg:aspect-[2/1]">
           <Image
-            src="/images/homepage/hero-img.png"
+            src="/images/homepage/hero-img.jpg"
             alt="Preview of the learning communication interface"
             fill
             priority
