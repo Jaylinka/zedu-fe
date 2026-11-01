@@ -141,6 +141,7 @@ export const DataProvider = ({ children }: DataProviderProps) => {
     threadMentionsHasMore: false,
     unseenThreadCount: 0,
     channelUnreadCount: 0,
+    unseenThreadCountRevision: 0,
     muteParticipant: false,
     buzzView: "side",
     buzzSidebar: false,
