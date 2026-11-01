@@ -373,6 +373,8 @@ const MessageBox = ({
           {showFormatting && (
             <div className="border-b border-[#E6EAEF] flex items-center gap-2 bg-[#F9FAFB] pl-3 pr-4 py-[5px]">
               <button
+                aria-label="Bold"
+                aria-pressed={editor?.isActive("bold") ?? false}
                 onClick={() => editor?.chain().focus().toggleBold().run()}
                 className={`p-1.5 hover:bg-gray-100 rounded ${
                   editor?.isActive("bold")
@@ -387,6 +389,8 @@ const MessageBox = ({
               </button>
 
               <button
+                aria-label="Italic"
+                aria-pressed={editor?.isActive("italic") ?? false}
                 onClick={() => editor?.chain().focus().toggleItalic().run()}
                 className={`p-1.5 hover:bg-gray-100 rounded ${
                   editor?.isActive("italic")
@@ -401,6 +405,8 @@ const MessageBox = ({
               </button>
 
               <button
+                aria-label="Strikethrough"
+                aria-pressed={editor?.isActive("strike") ?? false}
                 onClick={() => editor?.chain().focus().toggleStrike().run()}
                 className={`p-1.5 hover:bg-gray-100 rounded ${
                   editor?.isActive("strike")
@@ -419,6 +425,7 @@ const MessageBox = ({
               <Dialog open={open} onOpenChange={setOpen}>
                 <DialogTrigger asChild>
                   <button
+                    aria-label="Add link"
                     onClick={() => setOpen(true)}
                     className={`p-1.5 hover:bg-gray-100 rounded ${editor?.isActive("link") ? "bg-gray-200 font-semibold text-black" : ""}`}
                   >
@@ -469,6 +476,8 @@ const MessageBox = ({
               </Dialog>
 
               <button
+                aria-label="Numbered list"
+                aria-pressed={editor?.isActive("orderedList") ?? false}
                 type="button"
                 onMouseDown={(event) => event.preventDefault()}
                 onClick={() =>
@@ -489,6 +498,8 @@ const MessageBox = ({
               </button>
 
               <button
+                aria-label="Bulleted list"
+                aria-pressed={editor?.isActive("bulletList") ?? false}
                 type="button"
                 onMouseDown={(event) => event.preventDefault()}
                 onClick={() => editor?.chain().focus().toggleBulletList().run()}
@@ -507,6 +518,8 @@ const MessageBox = ({
               <div className="w-px h-5 bg-[#E6EAEF]" />
 
               <button
+                aria-label="Inline code"
+                aria-pressed={editor?.isActive("code") ?? false}
                 type="button"
                 onMouseDown={(event) => event.preventDefault()}
                 onClick={() => editor?.chain().focus().toggleCode().run()}
@@ -524,6 +537,8 @@ const MessageBox = ({
               </button>
 
               <button
+                aria-label="Code block"
+                aria-pressed={editor?.isActive("codeBlock") ?? false}
                 type="button"
                 onMouseDown={(event) => event.preventDefault()}
                 onClick={() => editor?.chain().focus().toggleCodeBlock().run()}
@@ -560,6 +575,7 @@ const MessageBox = ({
             <div className="flex items-center gap-2 py-2 pl-3 pr-4">
               <Tooltips text="Upload from your computer">
                 <button
+                  aria-label="Upload from your computer"
                   onClick={() => fileInputRef.current?.click()}
                   className="p-1.5 hover:bg-gray-100 rounded-full bg-[#F2F4F7]"
                 >
@@ -580,6 +596,9 @@ const MessageBox = ({
                 text={!showFormatting ? "Show formatting" : "Hide formatting"}
               >
                 <button
+                  aria-label={
+                    showFormatting ? "Hide formatting" : "Show formatting"
+                  }
                   onClick={() => setShowformatting((prev) => !prev)}
                   className="p-1.5 hover:bg-gray-100 rounded text-[#606060] underline"
                 >
@@ -598,6 +617,7 @@ const MessageBox = ({
                   >
                     <PopoverTrigger asChild>
                       <button
+                        aria-label="Emoji"
                         onClick={(e) => {
                           e.stopPropagation();
                           setIsEmojiPickerOpen((prev) => !prev);
@@ -656,6 +676,7 @@ const MessageBox = ({
 
               <Tooltips text="Mention someone">
                 <button
+                  aria-label="Mention someone"
                   onClick={handleMentionClick}
                   className="p-1.5 hover:bg-gray-100 rounded"
                 >
@@ -665,6 +686,7 @@ const MessageBox = ({
 
               <Tooltips text="Mention a channel">
                 <button
+                  aria-label="Mention a channel"
                   onClick={handleChannelMentionClick}
                   className="p-1.5 hover:bg-gray-100 rounded"
                 >
@@ -674,6 +696,7 @@ const MessageBox = ({
 
               <Tooltips text="Slash commands">
                 <button
+                  aria-label="Slash commands"
                   onClick={handleSlashCommandClick}
                   className="p-1.5 hover:bg-gray-100 rounded"
                 >
@@ -693,6 +716,7 @@ const MessageBox = ({
 
                   <Tooltips text="Record audio">
                     <button
+                      aria-label="Record audio"
                       className="p-1.5 hover:bg-gray-100 rounded hidden sm:flex"
                       onClick={() => setIsRecording(true)}
                       disabled={isRecording}
@@ -706,6 +730,7 @@ const MessageBox = ({
 
             <div className="flex items-center gap-1 py-2 pl-3 pr-4">
               <button
+                aria-label="Send message"
                 type="submit"
                 className="p-1.5 hover:bg-gray-100 rounded size-8 flex items-center justify-center"
                 onClick={handleSubmit}
