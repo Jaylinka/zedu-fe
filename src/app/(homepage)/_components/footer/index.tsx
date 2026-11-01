@@ -1,6 +1,6 @@
 "use client";
 import { isValidEmail } from "~/lib/utils";
-import React, { useState } from "react";
+import React, { useId, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Plus_Jakarta_Sans } from "next/font/google";
@@ -138,6 +138,9 @@ const Footer = () => {
   };
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
+  // #1407: ties the visible label and any error message to the email field.
+  const newsletterId = useId();
+  const newsletterErrorId = `${newsletterId}-error`;
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleSubmit = async (event: React.FormEvent) => {
@@ -194,7 +197,7 @@ const Footer = () => {
             >
               <div className="flex flex-col gap-1">
                 <label
-                  htmlFor="newsletter-email"
+                  htmlFor={newsletterId}
                   className="text-base font-bold tracking-tight text-white"
                 >
                   Sign up to our Newsletter
@@ -220,11 +223,13 @@ const Footer = () => {
                     />
                   </svg>
                   <input
-                    id="newsletter-email"
+                    id={newsletterId}
                     type="email"
                     name="newsletter"
-                    aria-invalid={!!error}
-                    aria-describedby={error ? "newsletter-error" : undefined}
+                    required
+                    autoComplete="email"
+                    aria-invalid={error ? true : undefined}
+                    aria-describedby={error ? newsletterErrorId : undefined}
                     placeholder="Your email address"
                     value={email}
                     onChange={(e) => {
@@ -260,7 +265,7 @@ const Footer = () => {
 
               {error && (
                 <p
-                  id="newsletter-error"
+                  id={newsletterErrorId}
                   className="text-xs font-medium text-red-300"
                   role="alert"
                 >
