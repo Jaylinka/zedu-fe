@@ -45,6 +45,7 @@ const dropdownSections: DropdownSection[] = [
       { label: "Buzz", href: "/products/buzz" },
       { label: "Channels", href: "/products/channels" },
       { label: "File Management", href: "/products/file-management" },
+      { label: "AI Assistant", href: "/products/ai" },
     ],
   },
   {
