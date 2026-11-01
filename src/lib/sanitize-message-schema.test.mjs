@@ -151,8 +151,10 @@ test("keeps apple emoji images but not arbitrary classes", () => {
 });
 
 // Same plugin chain as the channel message and delete-message renderers.
-const EMOJI_BASE = "https://cdn.example";
-const renderWithImageFilter = (markdown, emojiBase = EMOJI_BASE) =>
+const renderWithImageFilter = (
+  markdown,
+  emojiBase = fixtures.emojiDatasourceBase
+) =>
   renderToStaticMarkup(
     React.createElement(
       ReactMarkdown,
@@ -171,14 +173,13 @@ const renderWithImageFilter = (markdown, emojiBase = EMOJI_BASE) =>
 test("keeps apple emoji images from the emoji datasource only", () => {
   const emoji = `<img class="apple-emoji-img" alt="😀" src="${fixtures.emojiSrc}" draggable="false" />`;
   const html = renderWithImageFilter(
-    `<p>hi ${emoji}` +
-      '<img src="https://tracker.example/pixel.png">' +
-      '<img class="apple-emoji-img" src="https://tracker.example/fake.png">' +
-      '<img class="apple-emoji-img" src="https://cdn.example.evil/x.png">' +
-      "</p>\n\n![md](https://tracker.example/md.png)"
+    `<p>hi ${emoji}${fixtures.foreignImages.join("")}</p>\n\n${fixtures.markdownImage}`
   );
   assert.ok(html.includes(`src="${fixtures.emojiSrc}"`));
-  assert.doesNotMatch(html, /tracker\.example|cdn\.example\.evil/);
+  for (const foreign of [...fixtures.foreignImages, fixtures.markdownImage]) {
+    const src = foreign.match(/(?:src="|\()([^")]+)/)[1];
+    assert.ok(!html.includes(src), `${src} should be removed`);
+  }
   assert.equal((html.match(/<img/g) ?? []).length, 1);
 });
 
