@@ -55,7 +55,7 @@ export const metadata: Metadata = {
 
 const featureCards = [
   {
-    image: "/images/homepage/products/files/image-1.png",
+    image: "/images/homepage/products/files/image-1.jpg",
     title: "Store Course Materials in Organized Spaces",
     points: [
       "Organize files by courses, departments, or cohorts for easy access",
@@ -63,7 +63,7 @@ const featureCards = [
     ],
   },
   {
-    image: "/images/homepage/products/files/image-2.png",
+    image: "/images/homepage/products/files/image-2.jpg",
     title: "Collaborate on Files with Your Class",
     points: [
       "Share files directly in channels to keep context and discussions connected",

@@ -184,7 +184,7 @@ const UniversitiesSolutionsPage = () => {
           <div className="relative w-full overflow-hidden rounded-3xl">
             <div className="relative aspect-[16/11] w-full sm:aspect-[4/3] lg:aspect-[16/10]">
               <Image
-                src="/images/homepage/solutions/univerisities-hero.png"
+                src="/images/homepage/solutions/univerisities-hero.jpg"
                 alt="Students seated together while collaborating in the Zedu university workspace"
                 fill
                 priority

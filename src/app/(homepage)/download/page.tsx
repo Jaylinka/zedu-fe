@@ -126,7 +126,7 @@ const DownLoadPage = () => {
         <div className="w-full max-w-6xl overflow-hidden rounded-2xl">
           <div className="relative aspect-[16/10]  w-full sm:aspect-[16/9] lg:aspect-[2/1] ">
             <Image
-              src="/images/homepage/download/download-hero.png"
+              src="/images/homepage/download/download-hero.jpg"
               alt="Preview of the Zedu Application interfaces on mobile devices"
               fill
               priority
@@ -203,7 +203,7 @@ const DownLoadPage = () => {
           <div>
             <div className="mx-auto w-full max-w-[520px] overflow-hidden rounded-[1.5rem]">
               <Image
-                src="/images/homepage/download/mobile-app-showcase.png"
+                src="/images/homepage/download/mobile-app-showcase.jpg"
                 width={768}
                 height={833}
                 alt="Zedu mobile chat interface preview"

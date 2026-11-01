@@ -79,7 +79,7 @@ const structuredCommunicationCards = [
     title: "Manage Cohorts with Structure",
     desc: "Organize each cohort with dedicated channels, allowing teams to stay aligned on schedules, resources, and progress.",
     image:
-      "/images/homepage/solutions/bootcamps/manage-cohorts-with-structure.png",
+      "/images/homepage/solutions/bootcamps/manage-cohorts-with-structure.jpg",
   },
   {
     title: "Collaboration and Project Learning",
@@ -162,7 +162,7 @@ const BootCampsSolutionsPage = () => {
           <div className="relative w-full overflow-hidden rounded-3xl">
             <div className="relative aspect-[16/11] w-full sm:aspect-[4/3] lg:aspect-[16/10]">
               <Image
-                src="/images/homepage/solutions/bootcamps-hero.png"
+                src="/images/homepage/solutions/bootcamps-hero.jpg"
                 alt="Students seated together while collaborating in the Zedu bootcamp workspace"
                 fill
                 priority
@@ -285,7 +285,7 @@ const BootCampsSolutionsPage = () => {
         <div className="relative w-full overflow-hidden rounded-3xl">
           <div className="relative aspect-[16/9] h-[400px] w-full">
             <Image
-              src="/images/homepage/solutions/bootcamp-example.png"
+              src="/images/homepage/solutions/bootcamp-example.jpg"
               alt="Students collaborating together while working on group projects"
               fill
               sizes="100vw"
