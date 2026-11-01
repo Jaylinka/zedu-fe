@@ -63,7 +63,9 @@ import { uuidv7 } from "uuidv7";
 import { CHAT_FILE_ACCEPT } from "~/utils/document-files";
 import {
   clearMessageDraft,
+  finishMessageDraftSend,
   loadMessageDraft,
+  messageDraftKey,
   saveMessageDraft,
 } from "./message-drafts";
 
@@ -120,7 +122,11 @@ const MessageBox = ({
     handleImagePaste,
     handleTyping
   );
-  const storageKey = draftKey || (id ? `conversation:${id}` : "");
+  const storageKey = messageDraftKey(
+    state.user?.user_id ?? state.user?.id ?? "",
+    String(params.org ?? ""),
+    draftKey || (id ? `conversation:${id}` : "")
+  );
   const draftKeyRef = useRef(storageKey);
 
   useEffect(() => {
@@ -129,9 +135,7 @@ const MessageBox = ({
     draftKeyRef.current = storageKey;
 
     const persist = () => {
-      const key = draftKeyRef.current;
-      if (!key) return;
-      saveMessageDraft(key, editor.getHTML(), editor.isEmpty);
+      saveMessageDraft(storageKey, editor.getHTML(), editor.isEmpty);
     };
 
     const saved = loadMessageDraft(storageKey);
@@ -229,6 +233,12 @@ const MessageBox = ({
         sent = false;
       }
 
+      // A send can finish after navigation. Never clear or restore text in the
+      // conversation that replaced the one where this send started.
+      if (editor.isDestroyed || draftKeyRef.current !== storageKey) {
+        finishMessageDraftSend(storageKey, sentHtml, sent);
+        return;
+      }
       if (sent) {
         // Leave the draft alone if the user has already started a new message.
         if (editor.isEmpty) clearMessageDraft(storageKey);
