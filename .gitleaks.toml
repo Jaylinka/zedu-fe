@@ -21,13 +21,7 @@ keywords = [
   description = "Zedu-prefixed storage keys and cache names"
   regexTarget = "secret"
   regexes = [
-    '''^zedu[_-][a-z0-9_-]+
-description = "Allow known test fixtures and generated files"
-paths = [
-  '''integration\.json''',
-  '''(?:^|/)\.github/''',
-]
-'',
+    '''^zedu[_-][a-z0-9_-]+$''',
   ]
 
 [allowlist]
