@@ -4,6 +4,7 @@ import { ACTIONS } from "~/store/Actions";
 import { bootstrapOrganisationAccess } from "~/utils/org-access-api";
 import { DataContext } from "~/store/GlobalState";
 import { GetRequest } from "~/utils/new-request";
+import { showError } from "~/components/toast/sonner";
 import { usePathname, useRouter } from "next/navigation";
 import Topbar from "~/components/layout/topbar";
 import { ChannelBuzzProvider } from "~/hooks/buzz/ChannelBuzzContext";
@@ -274,6 +275,7 @@ const ClientLayout = ({
         dispatch({ type: ACTIONS.ORG_ROLES, payload: roles });
       } catch (error) {
         console.error("Failed to load organisation access data:", error);
+        showError("Failed to load organisation access data");
       } finally {
         dispatch({ type: ACTIONS.ORG_ACCESS_LOADING, payload: false });
       }
