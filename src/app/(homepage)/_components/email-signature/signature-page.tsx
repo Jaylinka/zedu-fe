@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useWatch } from "react-hook-form";
 import { Code2, Copy } from "lucide-react";
+import DOMPurify from "dompurify";
 import { Button } from "~/components/ui/button";
 import { showError, showSuccess } from "~/components/toast/sonner";
 import { buildSignature } from "./build-signature";
@@ -201,10 +202,16 @@ const SignaturePage = ({ siteBase }: SignaturePageProps) => {
               </div>
               <div className="flex flex-col gap-5 px-4 py-5 text-sm text-neutral-700 sm:px-5">
                 <p>Hi everyone, this week&apos;s notes are attached.</p>
-                {/* Every value is escaped and links are limited to http(s), mailto and tel in buildSignature. */}
+                {/* The browser sanitizes the preview; the server renders it empty. */}
                 <div
                   className="overflow-x-auto"
-                  dangerouslySetInnerHTML={{ __html: signature.html }}
+                  suppressHydrationWarning
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      typeof window === "undefined"
+                        ? ""
+                        : DOMPurify.sanitize(signature.html),
+                  }}
                 />
               </div>
             </div>
