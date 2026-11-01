@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { resources } from "~/app/(homepage)/_lib/resources";
 import { siteUrl } from "~/lib/env-urls";
 
 // The public marketing pages in (homepage). Workspace pages (/[org]/...) need a sign-in, so they are left out.
@@ -20,9 +21,14 @@ const PAGES: { path: string; priority: number }[] = [
   { path: "/terms-of-service", priority: 0.3 },
 ];
 
+// Resource articles with their own page. Read from the Resources list, so a new article is listed once its card links to it.
+const RESOURCE_PAGES = resources
+  .filter(({ link }) => link.startsWith("/resources/"))
+  .map(({ link }) => ({ path: link, priority: 0.5 }));
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = siteUrl();
-  return PAGES.map(({ path, priority }) => ({
+  return [...PAGES, ...RESOURCE_PAGES].map(({ path, priority }) => ({
     url: path === "/" ? base : `${base}${path}`,
     changeFrequency: "weekly",
     priority,
