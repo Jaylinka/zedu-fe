@@ -74,8 +74,13 @@ const resourcesLinks: FooterLink[] = [
   { id: 3, label: "Compare Zedu", href: "/compare" },
   { id: 4, label: "Zedu vs Discord", href: "/compare/zedu-vs-discord" },
   { id: 5, label: "Zedu vs Slack", href: "/compare/zedu-vs-slack" },
-  { id: 6, label: "Privacy Policy", href: "/policy" },
-  { id: 7, label: "Terms of Service", href: "/terms-of-service" },
+  {
+    id: 6,
+    label: "Zedu vs WhatsApp & Telegram",
+    href: "/resources?guide=zedu-vs-whatsapp-telegram-for-bootcamps",
+  },
+  { id: 7, label: "Privacy Policy", href: "/policy" },
+  { id: 8, label: "Terms of Service", href: "/terms-of-service" },
 ];
 
 const footerSections = [
@@ -118,16 +123,12 @@ const appStoreLinks = [
     store: "app" as const,
     icon: "/images/app-download/app-store-badge-2.png",
     label: "App Store",
-    rating: "5.0",
-    starKey: "app",
   },
   {
     id: 1,
     store: "play" as const,
     icon: "/images/app-download/google-play-badge-2.png",
     label: "Google Play",
-    rating: "4.9",
-    starKey: "play",
   },
 ];
 
@@ -302,21 +303,23 @@ const Footer = () => {
                       />
                       <span className="font-medium">{store.label}</span>
                     </div>
-                    <div className="flex items-center gap-1">
-                      {Array(5)
-                        .fill(0)
-                        .map((_, i) => (
-                          <Star
-                            key={`${store.starKey}-star-${i}`}
-                            color="gold"
-                            fill="gold"
-                            size={12}
-                          />
-                        ))}
-                      <span className="ml-1 text-sm text-white/85">
-                        {store.rating}
-                      </span>
-                    </div>
+                    {"starKey" in store && "rating" in store ? (
+                      <div className="flex items-center gap-1">
+                        {Array(5)
+                          .fill(0)
+                          .map((_, i) => (
+                            <Star
+                              key={`${(store as { starKey: string }).starKey}-star-${i}`}
+                              color="gold"
+                              fill="gold"
+                              size={12}
+                            />
+                          ))}
+                        <span className="ml-1 text-sm text-white/85">
+                          {(store as { rating: string }).rating}
+                        </span>
+                      </div>
+                    ) : null}
                   </Link>
                 ))}
               </div>
