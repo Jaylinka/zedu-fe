@@ -40,11 +40,11 @@ const renderCellValue = (value: PricingComparisonCellValue) => {
       );
     }
 
-    return <span aria-hidden="true">&nbsp;</span>;
+    return <span className="text-sm text-neutral-500">Not included</span>;
   }
 
   if (value === null || value === undefined || value === "") {
-    return <span aria-hidden="true">&nbsp;</span>;
+    return <span className="text-sm text-neutral-500">Not included</span>;
   }
 
   return <span className="text-sm text-neutral-700">{value}</span>;
