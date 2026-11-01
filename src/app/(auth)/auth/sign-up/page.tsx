@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { campaignPayload } from "~/lib/campaign-attribution";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { Button } from "~/components/ui/button";
@@ -63,7 +64,10 @@ function SignUp() {
     try {
       const id_token = response?.authorization?.id_token;
       if (!id_token) throw new Error("No id_token from Apple");
-      const res = await PostRequest("/auth/apple", { id_token });
+      const res = await PostRequest("/auth/apple", {
+        id_token,
+        ...campaignPayload(),
+      });
       if (res?.status === 200 || res?.status === 201) {
         const user = res?.data?.data?.user;
         const redirectUrl = searchParams.get("redirect") || "";
@@ -196,6 +200,7 @@ function SignUp() {
     if (validateForm()) {
       setLoading(true);
       const payload = {
+        ...campaignPayload(),
         email: trimmedEmail,
         password,
       };
@@ -259,6 +264,7 @@ function SignUp() {
       try {
         const res = await PostRequest("/auth/google", {
           grant_code: code,
+          ...campaignPayload(),
         });
 
         if (res?.status === 200 || res?.status === 201) {

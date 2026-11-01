@@ -64,7 +64,9 @@ import { uuidv7 } from "uuidv7";
 import { CHAT_FILE_ACCEPT } from "~/utils/document-files";
 import {
   clearMessageDraft,
+  finishMessageDraftSend,
   loadMessageDraft,
+  messageDraftKey,
   saveMessageDraft,
 } from "./message-drafts";
 
@@ -129,8 +131,11 @@ const MessageBox = ({
     handleImagePaste,
     handleTyping
   );
-  const storageKey = draftKey || (id ? `conversation:${id}` : "");
-  const draftKeyRef = useRef(storageKey);
+  const storageKey = messageDraftKey(
+    state.user?.user_id ?? state.user?.id ?? "",
+    String(params.org ?? ""),
+    draftKey || (id ? `conversation:${id}` : "")
+  );
   const activeScope = useRef(storageKey);
   activeScope.current = storageKey;
   const attachmentScope = useRef(storageKey);
@@ -164,6 +169,15 @@ const MessageBox = ({
       type: ACTIONS.MESSAGE_DELIVERY,
       payload: { id: attempt.id, status: sent ? "sent" : "failed" },
     });
+    // Preserve staging's late-send draft reconciliation without touching the
+    // editor belonging to a different conversation (or an unmounted composer).
+    if (
+      !mounted.current ||
+      activeScope.current !== attempt.scope ||
+      editor?.isDestroyed
+    ) {
+      finishMessageDraftSend(attempt.scope, attempt.html, sent);
+    }
     if (!mounted.current) return;
     if (sent && activeScope.current === attempt.scope && !editor?.isDestroyed) {
       // Keep anything composed while the request was in flight.
@@ -180,12 +194,8 @@ const MessageBox = ({
   useEffect(() => {
     if (!editor || !storageKey) return;
 
-    draftKeyRef.current = storageKey;
-
     const persist = () => {
-      const key = draftKeyRef.current;
-      if (!key) return;
-      saveMessageDraft(key, editor.getHTML(), editor.isEmpty);
+      saveMessageDraft(storageKey, editor.getHTML(), editor.isEmpty);
     };
 
     const saved = loadMessageDraft(storageKey);

@@ -86,6 +86,107 @@ test("a superseded failed attempt cannot be replayed", async () => {
   assert.equal(await delivery.deliver(old, true), false);
 });
 
+// Exercise the merged composer's actual completion handler so staging's draft
+// reconciliation cannot be lost while retaining the retry implementation.
+const composerSource = readFileSync(
+  new URL("./index.tsx", import.meta.url),
+  "utf8"
+);
+const composerAst = ts.createSourceFile(
+  "index.tsx",
+  composerSource,
+  ts.ScriptTarget.Latest,
+  true,
+  ts.ScriptKind.TSX
+);
+let completionHandler;
+function findCompletion(node) {
+  if (
+    ts.isVariableDeclaration(node) &&
+    node.name.getText(composerAst) === "runDelivery"
+  )
+    completionHandler = node.initializer.getText(composerAst);
+  ts.forEachChild(node, findCompletion);
+}
+findCompletion(composerAst);
+for (const [destination, sent] of [
+  ["same", true],
+  ["same", false],
+  ["navigated", true],
+  ["navigated", false],
+  ["unmounted", true],
+  ["unmounted", false],
+]) {
+  test(`composer completion after ${destination}, success=${sent}, preserves draft ownership`, async () => {
+    let settle;
+    const message = attempt(
+      () =>
+        new Promise((resolve) => {
+          settle = resolve;
+        })
+    );
+    const reconciled = [],
+      cleared = [],
+      removed = [];
+    const mounted = { current: true },
+      scope = { current: message.scope };
+    let editorClears = 0;
+    const editor = {
+      isDestroyed: false,
+      getHTML: () => message.html,
+      commands: {
+        clearContent: () => {
+          editorClears++;
+        },
+      },
+    };
+    const run = new Function(
+      "delivery",
+      "channelLoading",
+      "subscription",
+      "dispatch",
+      "ACTIONS",
+      "refreshDelivery",
+      "mounted",
+      "activeScope",
+      "editor",
+      "finishMessageDraftSend",
+      "clearMessageDraft",
+      "remove",
+      `${compile(`const run = ${completionHandler};`)};return run;`
+    )(
+      { current: new MessageDelivery() },
+      false,
+      {},
+      () => {},
+      {},
+      () => {},
+      mounted,
+      scope,
+      editor,
+      (...args) => reconciled.push(args),
+      (key) => cleared.push(key),
+      (id) => removed.push(id)
+    );
+    const pending = run(message);
+    if (destination === "navigated") scope.current = "channel:b";
+    if (destination === "unmounted") mounted.current = false;
+    settle(sent);
+    await pending;
+    if (destination === "same") {
+      assert.deepEqual(reconciled, []);
+      assert.equal(editorClears, sent ? 1 : 0);
+      assert.deepEqual(cleared, sent ? [message.scope] : []);
+      assert.deepEqual(removed, sent ? message.attachmentIds : []);
+    } else {
+      assert.deepEqual(reconciled, [[message.scope, message.html, sent]]);
+      assert.equal(editorClears, 0);
+      assert.deepEqual(cleared, []);
+      assert.deepEqual(removed, []);
+    }
+  });
+}
+
 // Exercise the actual route callbacks, including legacy routes and all three
 // thread endpoint types. The request helper returns errors rather than throwing.
 const base = new URL("../../", import.meta.url);
