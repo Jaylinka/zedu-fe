@@ -22,6 +22,7 @@ import {
 } from "~/lib/password";
 
 import { isAutoCreatedOrg } from "~/utils/organisation";
+import { getSafeRedirect } from "~/utils/safe-redirect";
 
 /**
  * User registration page supporting email/password, Google, Apple auth, and template onboarding.
@@ -70,7 +71,7 @@ function SignUp() {
       });
       if (res?.status === 200 || res?.status === 201) {
         const user = res?.data?.data?.user;
-        const redirectUrl = searchParams.get("redirect") || "";
+        const redirectUrl = getSafeRedirect(searchParams.get("redirect"));
         localStorage.setItem("token", res?.data?.data?.access_token);
         localStorage.setItem("useremail", user?.email);
         localStorage.setItem("user", JSON.stringify(user));
@@ -205,7 +206,7 @@ function SignUp() {
         password,
       };
 
-      const redirectUrl = searchParams.get("redirect") || "";
+      const redirectUrl = getSafeRedirect(searchParams.get("redirect"));
       const res = await PostRequest("/auth/register", payload);
 
       if (res?.status === 200 || res?.status === 201) {
@@ -269,7 +270,7 @@ function SignUp() {
 
         if (res?.status === 200 || res?.status === 201) {
           const user = res?.data?.data?.user;
-          const redirectUrl = searchParams.get("redirect") || "";
+          const redirectUrl = getSafeRedirect(searchParams.get("redirect"));
 
           localStorage.setItem("token", res?.data?.data?.access_token);
           localStorage.setItem("useremail", user?.email);
