@@ -74,6 +74,16 @@ export const resources: ResourceItem[] = [
     link: "/resources/cohort-communication-planner",
   },
   {
+    id: 9,
+    tab: "guides",
+    category: "Tools",
+    title: "Email Signature Generator",
+    description:
+      "Make a clean email signature for your school or cohort, with a link that invites learners to your Zedu community.",
+    image: "/images/homepage/resources/image-2.png",
+    link: "/resources/email-signature-generator",
+  },
+  {
     id: 6,
     tab: "webinars",
     category: "Webinar",
