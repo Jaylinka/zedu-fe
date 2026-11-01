@@ -1,3 +1,4 @@
+import { SolutionResources } from "~/app/(homepage)/_components/ui/SolutionResources";
 import type { Metadata } from "next";
 import { siteUrl } from "~/lib/env-urls";
 import Image from "next/image";
@@ -296,6 +297,8 @@ const BootCampsSolutionsPage = () => {
           </div>
         </div>
       </section>
+
+      <SolutionResources audience="bootcamps" />
 
       <div data-personalize="final-cta">
         <DynamicFooter
