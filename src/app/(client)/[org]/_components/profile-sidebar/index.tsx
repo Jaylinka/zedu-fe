@@ -34,10 +34,15 @@ const ProfileSidebar = ({
 
   const orgId = state?.orgId || "";
 
-  const dmInStore = (state?.dms || []).find(
-    (dm: any) =>
-      String(dm.channel_id || dm.channels_id) === String(channelId || "")
-  );
+  // The Home sidebar lists homeDms, not dms — check both so reopening the
+  // panel after a toggle reads the updated shared entry instead of the stale
+  // prop captured when the page first mounted.
+  const findDmIn = (list: any[]) =>
+    (list || []).find(
+      (dm: any) =>
+        String(dm.channel_id || dm.channels_id) === String(channelId || "")
+    );
+  const dmInStore = findDmIn(state?.dms) ?? findDmIn(state?.homeDms);
   const isFavouriteKnown = Boolean(dmInStore) || localIsFavourite !== null;
   const isFavourite =
     !isToggling && dmInStore
