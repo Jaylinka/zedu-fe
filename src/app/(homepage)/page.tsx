@@ -8,16 +8,16 @@ import { FAQSection } from "./_components/home/FAQSection";
 import { DynamicFooter } from "./_components/footer/dynamic-footer";
 import { getHomeStructuredData } from "./_lib/homeStructuredData";
 
+const description =
+  "Stop juggling scattered chat groups, meeting links, and shared folders. Zedu brings learners and educators together in one organized space built for bootcamps and learning communities.";
 export const metadata: Metadata = {
   title: {
     absolute: "Zedu - One Workspace for Your Entire Cohort",
   },
-  description:
-    "Stop juggling scattered chat groups, meeting links, and shared folders. Zedu brings learners and educators together in one organized space built for bootcamps and learning communities.",
+  description,
   openGraph: {
     title: "Zedu - One Workspace for Your Entire Cohort",
-    description:
-      "Stop juggling scattered chat groups, meeting links, and shared folders. Zedu brings learners and educators together in one organized space built for bootcamps and learning communities.",
+    description,
     url: "/",
     siteName: "Zedu",
     images: [
