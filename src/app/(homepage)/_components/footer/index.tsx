@@ -72,8 +72,9 @@ const resourcesLinks: FooterLink[] = [
     label: "Google Classroom Alternative",
     href: "/alternatives/google-classroom",
   },
-  { id: 3, label: "Privacy Policy", href: "/policy" },
-  { id: 4, label: "Terms of Service", href: "/terms-of-service" },
+  { id: 3, label: "Compare Zedu", href: "/compare" },
+  { id: 4, label: "Privacy Policy", href: "/policy" },
+  { id: 5, label: "Terms of Service", href: "/terms-of-service" },
 ];
 
 const footerSections = [

@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { siteUrl } from "~/lib/env-urls";
+import { allComparisonSlugs } from "~/app/(homepage)/_components/compare/comparisonData";
 
 // The public marketing pages in (homepage). Workspace pages (/[org]/...) need a sign-in, so they are left out.
 const PAGES: { path: string; priority: number }[] = [
@@ -10,6 +11,11 @@ const PAGES: { path: string; priority: number }[] = [
   { path: "/solutions/schools", priority: 0.8 },
   { path: "/solutions/universities", priority: 0.8 },
   { path: "/alternatives/google-classroom", priority: 0.8 },
+  { path: "/compare", priority: 0.7 },
+  ...allComparisonSlugs.map((slug) => ({
+    path: `/compare/${slug}`,
+    priority: 0.7,
+  })),
   { path: "/products/channels", priority: 0.7 },
   { path: "/products/buzz", priority: 0.7 },
   { path: "/products/file-management", priority: 0.7 },
